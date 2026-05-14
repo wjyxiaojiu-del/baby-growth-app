@@ -1,0 +1,106 @@
+<view class="page-container">
+  <!-- 月龄选择器 -->
+  <view class="month-selector">
+    <scroll-view scroll-x class="month-scroll">
+      <view
+        wx:for="{{13}}"
+        wx:key="*this"
+        class="month-chip {{currentMonth === index ? 'active' : ''}}"
+        bindtap="switchMonth"
+        data-month="{{index}}"
+      >
+        {{index}}月
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 宝宝月龄提示 -->
+  <view class="age-hint card" wx:if="{{babyAge}}">
+    <text class="age-hint-text">宝宝当前 {{babyAge.display}}，以下是 {{currentMonth}} 月龄应掌握的技能</text>
+  </view>
+
+  <!-- 发育领域列表 -->
+  <view class="domain-section" wx:for="{{domains}}" wx:key="key" wx:for-item="domain">
+    <view class="domain-header">
+      <text class="domain-icon">{{domain.icon}}</text>
+      <text class="domain-name">{{domain.label}}</text>
+      <text class="domain-count">
+        {{milestones[domain.key] ? milestones[domain.key].length : 0}} 项
+      </text>
+    </view>
+
+    <view class="milestone-list">
+      <view
+        wx:for="{{milestones[domain.key]}}"
+        wx:key="id"
+        wx:for-item="item"
+        class="milestone-item {{checkedItems[item.id] ? 'checked' : ''}}"
+        bindtap="toggleMilestone"
+        data-id="{{item.id}}"
+        data-domain="{{domain.key}}"
+      >
+        <view class="check-box">
+          <text wx:if="{{checkedItems[item.id]}}">✓</text>
+        </view>
+        <text class="milestone-text">{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 生成评估按钮 -->
+  <view class="action-bar">
+    <button class="btn-primary" bindtap="generateRadar">生成发育雷达图</button>
+  </view>
+
+  <!-- 评估结果 -->
+  <view class="result-section" wx:if="{{showResult && radarData}}">
+    <view class="result-card card">
+      <view class="result-title">发育评估结果</view>
+
+      <!-- 总分 -->
+      <view class="total-score">
+        <view class="score-circle">
+          <text class="score-number">{{radarData.totalScore}}</text>
+          <text class="score-unit">分</text>
+        </view>
+        <text class="score-desc">
+          {{radarData.totalScore >= 80 ? '发育良好' : radarData.totalScore >= 50 ? '正常发展' : '需要关注'}}
+        </text>
+      </view>
+
+      <!-- 各维度得分 -->
+      <view class="domain-scores">
+        <view class="domain-score-item" wx:for="{{radarData.scores}}" wx:key="key">
+          <view class="score-label">
+            <text class="score-domain-name">{{item.label}}</text>
+            <text class="score-detail">{{item.checked}}/{{item.total}}</text>
+          </view>
+          <view class="score-bar-bg">
+            <view class="score-bar" style="width:{{item.score}}%; background:{{item.score >= 80 ? '#4CAF50' : item.score >= 50 ? '#FF9800' : '#F44336'}}"></view>
+          </view>
+          <text class="score-value">{{item.score}}%</text>
+        </view>
+      </view>
+
+      <!-- 优势/待关注领域 -->
+      <view class="insight-section" wx:if="{{radarData.strongDomains.length > 0}}">
+        <view class="insight-title">优势领域</view>
+        <view class="insight-tags">
+          <text class="insight-tag strong" wx:for="{{radarData.strongDomains}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+
+      <view class="insight-section" wx:if="{{radarData.weakDomains.length > 0}}">
+        <view class="insight-title">待关注领域</view>
+        <view class="insight-tags">
+          <text class="insight-tag weak" wx:for="{{radarData.weakDomains}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 查看AI报告 -->
+      <view class="ai-report-link" bindtap="goReport">
+        <text>查看完整AI评估报告 ›</text>
+      </view>
+    </view>
+  </view>
+</view>

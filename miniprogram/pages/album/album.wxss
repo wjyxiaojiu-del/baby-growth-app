@@ -1,0 +1,59 @@
+.page-container { padding-bottom: 120rpx; }
+
+.loading-wrap { display: flex; align-items: center; justify-content: center; height: 60vh; }
+
+.album-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 24rpx; padding: 32rpx;
+  background: linear-gradient(135deg, rgba(255,107,129,0.08), rgba(255,181,194,0.12));
+  border-radius: 24rpx;
+}
+
+.album-stats { display: flex; align-items: baseline; gap: 8rpx; }
+.album-total { font-size: 48rpx; font-weight: 700; color: #FF6B81; }
+.album-label { font-size: 26rpx; color: #888; }
+
+.btn-sm { font-size: 24rpx; padding: 12rpx 32rpx; border-radius: 32rpx; }
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 120rpx 48rpx; text-align: center;
+}
+.empty-icon { font-size: 80rpx; margin-bottom: 24rpx; }
+.empty-title { font-size: 34rpx; font-weight: 700; color: #333; margin-bottom: 12rpx; }
+.empty-desc { font-size: 26rpx; color: #888; }
+
+.month-group { margin: 24rpx; }
+.month-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16rpx 0; margin-bottom: 16rpx;
+}
+.month-title { font-size: 30rpx; font-weight: 700; color: #333; }
+.month-count { font-size: 24rpx; color: #999; }
+
+.photo-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12rpx;
+}
+
+.photo-item { position: relative; border-radius: 16rpx; overflow: hidden; aspect-ratio: 1; }
+.photo-img { width: 100%; height: 100%; }
+
+.photo-tag {
+  position: absolute; bottom: 8rpx; left: 8rpx;
+  background: rgba(255,107,129,0.85); color: #FFF;
+  font-size: 20rpx; padding: 4rpx 12rpx; border-radius: 12rpx;
+}
+
+.photo-actions {
+  position: absolute; top: 8rpx; right: 8rpx;
+  display: flex; gap: 8rpx; opacity: 0;
+}
+
+.photo-item:active .photo-actions { opacity: 1; }
+
+.photo-action-btn {
+  width: 48rpx; height: 48rpx; border-radius: 50%;
+  background: rgba(0,0,0,0.4); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 24rpx;
+}

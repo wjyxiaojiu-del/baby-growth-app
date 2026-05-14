@@ -1,0 +1,48 @@
+<view class="page-container">
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+  </view>
+
+  <block wx:else>
+    <!-- 头部统计 -->
+    <view class="album-header card">
+      <view class="album-stats">
+        <text class="album-total">{{totalPhotos}}</text>
+        <text class="album-label">张照片</text>
+      </view>
+      <button class="btn-primary btn-sm" bindtap="addPhoto">+ 添加照片</button>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{totalPhotos === 0}}" class="empty-state">
+      <text class="empty-icon">📷</text>
+      <text class="empty-title">还没有照片</text>
+      <text class="empty-desc">记录宝宝的成长瞬间，按月龄自动归档</text>
+      <button class="btn-primary" bindtap="addPhoto" style="margin-top:40rpx;">上传第一张照片</button>
+    </view>
+
+    <!-- 按月龄分组展示 -->
+    <view wx:for="{{monthGroups}}" wx:key="month" class="month-group">
+      <view class="month-header">
+        <text class="month-title">{{item.month === 0 ? '出生' : item.month + '月龄'}}</text>
+        <text class="month-count">{{item.count}}张</text>
+      </view>
+      <view class="photo-grid">
+        <view class="photo-item" wx:for="{{item.photos}}" wx:key="_id" wx:for-item="photo">
+          <image
+            class="photo-img"
+            src="{{photo.filePath || photo.tempFilePath}}"
+            mode="aspectFill"
+            data-path="{{photo.filePath || photo.tempFilePath}}"
+            bindtap="previewPhoto"
+          />
+          <view class="photo-tag" wx:if="{{photo.milestoneTag}}">{{photo.milestoneTag}}</view>
+          <view class="photo-actions">
+            <view class="photo-action-btn" data-id="{{photo._id}}" bindtap="tagMilestone">⭐</view>
+            <view class="photo-action-btn" data-id="{{photo._id}}" bindtap="deletePhoto">🗑️</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,71 @@
+<view class="page-container">
+  <view class="header card">
+    <text class="header-title">疫苗接种管理</text>
+    <text class="header-desc">根据国家免疫规划自动匹配</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <view wx:else class="vaccine-list">
+    <view
+      wx:for="{{vaccines}}"
+      wx:key="name"
+      class="vaccine-item card"
+    >
+      <view class="vaccine-left">
+        <view class="vaccine-status-dot" style="background:{{item.statusColor}}"></view>
+        <view class="vaccine-info">
+          <text class="vaccine-name">{{item.name}}</text>
+          <text class="vaccine-meta">
+            <text class="vaccine-category">{{item.category}}</text>
+            <text class="vaccine-date">预计 {{item.dueDate}}</text>
+          </text>
+        </view>
+      </view>
+      <view class="vaccine-right">
+        <view
+          wx:if="{{item.status === 'completed'}}"
+          class="vaccine-done"
+        >
+          ✓ 已接种
+        </view>
+        <view
+          wx:elif="{{item.status === 'overdue' || item.status === 'upcoming'}}"
+          class="vaccine-btn {{item.status}}"
+          bindtap="markCompleted"
+          data-name="{{item.name}}"
+          data-category="{{item.category}}"
+          data-duedate="{{item.dueDate}}"
+        >
+          标记接种
+        </view>
+        <view wx:else class="vaccine-pending">
+          {{item.statusLabel}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 图例 -->
+  <view class="legend card">
+    <view class="legend-item">
+      <view class="legend-dot" style="background:#4CAF50"></view>
+      <text>已接种</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot" style="background:#FF6B81"></view>
+      <text>已到期</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot" style="background:#FF9800"></view>
+      <text>即将到期</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot" style="background:#CCC"></view>
+      <text>待接种</text>
+    </view>
+  </view>
+</view>

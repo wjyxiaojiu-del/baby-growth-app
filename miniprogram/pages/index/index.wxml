@@ -1,0 +1,151 @@
+<view class="page-container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <block wx:else>
+    <!-- 宝宝信息卡片 -->
+    <view class="baby-card card" bindtap="goEditBaby">
+      <view class="baby-avatar-wrap">
+        <image class="baby-avatar" src="{{babyInfo.avatar || '/images/baby-default.png'}}" mode="aspectFill" />
+      </view>
+      <view class="baby-info">
+        <text class="baby-name">{{babyInfo.nickname || '宝宝'}}</text>
+        <text class="baby-age">{{babyAge.display}}</text>
+      </view>
+      <view class="baby-card-arrow">›</view>
+    </view>
+
+    <!-- 快捷记录入口 -->
+    <view class="quick-record card">
+      <view class="section-title">快捷记录</view>
+      <view class="quick-grid">
+        <view class="quick-item" bindtap="goRecord" data-type="height">
+          <view class="quick-icon icon-height">📏</view>
+          <text class="quick-label">身高体重</text>
+        </view>
+        <view class="quick-item" bindtap="goRecord" data-type="sleep">
+          <view class="quick-icon icon-sleep">😴</view>
+          <text class="quick-label">睡眠</text>
+        </view>
+        <view class="quick-item" bindtap="goRecord" data-type="feed">
+          <view class="quick-icon icon-feed">🍼</view>
+          <text class="quick-label">喂养</text>
+        </view>
+        <view class="quick-item" bindtap="goRecord" data-type="poop">
+          <view class="quick-icon icon-poop">💩</view>
+          <text class="quick-label">便便</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 功能入口 -->
+    <view class="feature-grid card">
+      <view class="section-title">更多功能</view>
+      <view class="feature-row">
+        <view class="feature-item" bindtap="goAlbum">
+          <view class="feature-icon icon-album">📷</view>
+          <text class="feature-label">成长相册</text>
+        </view>
+        <view class="feature-item" bindtap="goRemind">
+          <view class="feature-icon icon-remind">🔔</view>
+          <text class="feature-label">智能提醒</text>
+        </view>
+        <view class="feature-item" bindtap="goKnowledge">
+          <view class="feature-icon icon-knowledge">📚</view>
+          <text class="feature-label">育儿知识</text>
+        </view>
+        <view class="feature-item" bindtap="goVaccine">
+          <view class="feature-icon icon-vaccine">💉</view>
+          <text class="feature-label">疫苗管理</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 智能提醒卡片 -->
+    <view class="remind-card card" wx:if="{{activeReminders.length > 0}}" bindtap="goRemind">
+      <view class="section-title">近期提醒</view>
+      <view class="remind-list">
+        <view class="remind-item" wx:for="{{activeReminders}}" wx:key="title">
+          <text class="remind-item-icon">{{item.icon}}</text>
+          <view class="remind-item-info">
+            <text class="remind-item-title">{{item.title || item.teeth || item.name}}</text>
+            <text class="remind-item-type">{{item.type}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 今日概览 -->
+    <view class="today-overview card">
+      <view class="section-title">今日概览</view>
+      <view class="overview-grid">
+        <view class="overview-item">
+          <text class="overview-value">{{todaySummary.sleepCount}}</text>
+          <text class="overview-label">次睡眠</text>
+        </view>
+        <view class="overview-item">
+          <text class="overview-value">{{todaySummary.feedCount}}</text>
+          <text class="overview-label">次喂养</text>
+        </view>
+        <view class="overview-item">
+          <text class="overview-value">{{todaySummary.poopCount}}</text>
+          <text class="overview-label">次便便</text>
+        </view>
+        <view class="overview-item">
+          <text class="overview-value">{{todaySummary.foodCount}}</text>
+          <text class="overview-label">种辅食</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 辅食提醒 -->
+    <view class="food-reminder card" wx:if="{{babyAge && babyAge.months >= 6 && todaySummary.foodCount === 0}}" bindtap="goFood">
+      <view class="food-reminder-icon">🍽️</view>
+      <view class="food-reminder-text">
+        <text class="food-reminder-title">今日辅食</text>
+        <text class="food-reminder-desc">宝宝今天还没记录辅食，去添加吧</text>
+      </view>
+      <view class="food-reminder-arrow">›</view>
+    </view>
+
+    <!-- AI评估入口 -->
+    <view class="ai-entry card" bindtap="goReport">
+      <view class="ai-entry-left">
+        <view class="ai-icon">AI</view>
+        <view class="ai-text">
+          <text class="ai-title">智能评估报告</text>
+          <text class="ai-desc" wx:if="{{aiReady}}">数据已就绪，点击生成宝宝天赋画像</text>
+          <text class="ai-desc" wx:else>继续记录数据，积累越多评估越准</text>
+        </view>
+      </view>
+      <view class="ai-arrow" wx:if="{{aiReady}}">›</view>
+    </view>
+
+    <!-- 疫苗提醒 -->
+    <view class="vaccine-reminder card" wx:if="{{vaccineReminder}}" bindtap="goVaccine">
+      <view class="vaccine-icon">💉</view>
+      <view class="vaccine-text">
+        <text class="vaccine-title">疫苗提醒</text>
+        <text class="vaccine-desc">{{vaccineReminder.name}} 即将到期</text>
+      </view>
+      <view class="vaccine-date">{{vaccineReminder.dueDate}}</view>
+    </view>
+
+    <!-- 最近记录 -->
+    <view class="recent-records card" wx:if="{{recentRecords.length > 0}}">
+      <view class="section-title">最近记录</view>
+      <view class="record-list">
+        <view class="record-item" wx:for="{{recentRecords}}" wx:key="_id">
+          <view class="record-type-tag {{item.type}}">{{item.typeLabel}}</view>
+          <view class="record-content">
+            <text class="record-value">{{item.displayValue}}</text>
+            <text class="record-time">{{item.createTimeStr}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

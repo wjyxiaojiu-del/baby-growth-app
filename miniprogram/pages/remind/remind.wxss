@@ -1,0 +1,46 @@
+.page-container { padding-bottom: 120rpx; }
+
+.loading-wrap { display: flex; align-items: center; justify-content: center; height: 60vh; }
+
+.remind-header {
+  margin: 24rpx; padding: 32rpx; text-align: center;
+  background: linear-gradient(135deg, rgba(255,107,129,0.08), rgba(255,181,194,0.12));
+  border-radius: 24rpx;
+}
+.remind-baby { display: block; font-size: 36rpx; font-weight: 700; color: #333; }
+.remind-age { display: block; font-size: 28rpx; color: #FF6B81; margin-top: 8rpx; }
+.remind-desc { display: block; font-size: 24rpx; color: #999; margin-top: 8rpx; }
+
+.category-bar {
+  display: flex; gap: 12rpx; padding: 16rpx 24rpx;
+  overflow-x: auto; white-space: nowrap;
+}
+.cat-item {
+  padding: 12rpx 24rpx; border-radius: 32rpx;
+  font-size: 24rpx; color: #888; background: #F8F8F8;
+  flex-shrink: 0;
+}
+.cat-item.active {
+  background: linear-gradient(135deg, #FF6B81, #FF8E9E);
+  color: #FFF; font-weight: 600;
+}
+
+.remind-list { padding: 0 24rpx; }
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 120rpx 48rpx; text-align: center;
+}
+.empty-icon { font-size: 80rpx; margin-bottom: 24rpx; }
+.empty-title { font-size: 34rpx; font-weight: 700; color: #333; margin-bottom: 12rpx; }
+.empty-desc { font-size: 26rpx; color: #888; }
+
+.remind-card { margin-bottom: 20rpx; padding: 28rpx; }
+.remind-card-header { display: flex; align-items: center; gap: 16rpx; margin-bottom: 12rpx; }
+.remind-icon { font-size: 40rpx; }
+.remind-card-info { flex: 1; }
+.remind-card-title { display: block; font-size: 30rpx; font-weight: 600; color: #333; }
+.remind-card-category { display: block; font-size: 22rpx; color: #FF6B81; margin-top: 4rpx; }
+.remind-due { font-size: 24rpx; color: #FF6B81; font-weight: 600; background: rgba(255,107,129,0.1); padding: 6rpx 16rpx; border-radius: 16rpx; }
+.remind-month { font-size: 24rpx; color: #888; }
+.remind-card-desc { font-size: 26rpx; color: #666; line-height: 1.6; }

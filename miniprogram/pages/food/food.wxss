@@ -1,0 +1,824 @@
+/* ==================== 辅食助手 — 统一视觉规范 ==================== */
+/* 遵循全局设计：主题色 #FF6B81，毛玻璃 .card，flexbox 布局 */
+
+.page-container {
+  padding-bottom: 120rpx;
+}
+
+/* ===== Tab 栏（与 record 页面统一） ===== */
+.tab-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  padding: 16rpx 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1rpx solid rgba(255, 107, 129, 0.08);
+}
+
+.tab-item {
+  padding: 10rpx 28rpx;
+  border-radius: 28rpx;
+  transition: all 0.2s ease;
+}
+
+.tab-item.active {
+  background: rgba(255, 240, 242, 0.9);
+}
+
+.tab-label {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.tab-item.active .tab-label {
+  color: #FF6B81;
+  font-weight: 600;
+}
+
+/* ===== 内容区 ===== */
+.tab-content {
+  padding: 20rpx 24rpx;
+}
+
+/* ===== 周视图日历 ===== */
+.week-calendar {
+  display: flex;
+  justify-content: space-between;
+  padding: 20rpx 12rpx;
+}
+
+.week-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 76rpx;
+  height: 96rpx;
+  border-radius: 18rpx;
+  transition: all 0.2s ease;
+}
+
+.week-day.selected {
+  background: linear-gradient(135deg, #FF6B81, #FFB5C2);
+  box-shadow: 0 4rpx 14rpx rgba(255, 107, 129, 0.25);
+}
+
+.week-day.selected .week-day-name,
+.week-day.selected .week-day-num {
+  color: #fff;
+}
+
+.week-day.today-mark {
+  border: 2rpx solid #FF6B81;
+}
+
+.week-day-name {
+  font-size: 20rpx;
+  color: #999;
+  margin-bottom: 4rpx;
+}
+
+.week-day-num {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ===== 区块标题 ===== */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.section-subtitle {
+  font-size: 22rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+/* ===== 分数标签 ===== */
+.score-pill {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #FF6B81, #FFB5C2);
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.score-pill-label {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.9);
+  margin-right: 6rpx;
+}
+
+.score-pill-value {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ===== 记录列表 ===== */
+.log-list {
+  margin-top: 8rpx;
+}
+
+.log-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.04);
+}
+
+.log-item:last-child {
+  border-bottom: none;
+}
+
+.log-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.log-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.log-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+}
+
+.log-meta {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.log-actions {
+  display: flex;
+  gap: 12rpx;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.04);
+  font-size: 24rpx;
+}
+
+.action-btn.reaction-active {
+  background: #fff2f0;
+}
+
+.delete-btn {
+  background: rgba(255, 77, 79, 0.08);
+}
+
+/* ===== 空状态 ===== */
+.empty-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 40rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 72rpx;
+  margin-bottom: 16rpx;
+}
+
+.empty-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.empty-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.empty-mini {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+  font-size: 26rpx;
+}
+
+/* ===== 推荐卡片 ===== */
+.suggestion-tips {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+  display: block;
+  line-height: 1.5;
+}
+
+.suggestion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 12rpx 20rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 28rpx;
+  font-size: 24rpx;
+  color: #333;
+  border: 2rpx solid transparent;
+}
+
+.chip-primary {
+  border-color: #FF6B81;
+  background: rgba(255, 107, 129, 0.05);
+}
+
+.chip-fruit {
+  border-color: #FFB5C2;
+  background: rgba(255, 181, 194, 0.08);
+}
+
+.chip-icon {
+  font-size: 28rpx;
+}
+
+.chip-plus {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 16rpx;
+  background: #FF6B81;
+  color: #fff;
+  font-size: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4rpx;
+}
+
+/* ===== 信息提示 ===== */
+.info-card {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 24rpx;
+}
+
+.info-icon {
+  font-size: 44rpx;
+}
+
+.info-text {
+  font-size: 26rpx;
+  color: #666;
+  flex: 1;
+  line-height: 1.5;
+}
+
+/* ===== 百科搜索 ===== */
+.search-card {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+}
+
+.search-input {
+  flex: 1;
+  height: 64rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.search-icon {
+  font-size: 28rpx;
+  color: #999;
+  margin-left: 12rpx;
+  flex-shrink: 0;
+}
+
+/* ===== 分类筛选 ===== */
+.category-scroll {
+  white-space: nowrap;
+  margin-bottom: 20rpx;
+}
+
+.filter-pill {
+  display: inline-block;
+  padding: 10rpx 22rpx;
+  margin-right: 10rpx;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.filter-pill.active {
+  background: linear-gradient(135deg, #FF6B81, #FFB5C2);
+  color: #fff;
+}
+
+/* ===== 食物列表（flex 两列，替代 grid） ===== */
+.food-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -8rpx;
+}
+
+.food-item {
+  width: calc(50% - 16rpx);
+  margin: 8rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 12rpx;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 20rpx;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.food-item.disabled {
+  opacity: 0.45;
+}
+
+.food-icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-bottom: 10rpx;
+}
+
+.food-name {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 4rpx;
+}
+
+.food-month {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.food-badge {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  background: #ff4d4f;
+  color: #fff;
+  font-size: 18rpx;
+  padding: 2rpx 8rpx;
+  border-radius: 8rpx;
+}
+
+/* ===== 排敏 ===== */
+.allergy-card {
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  border-left: 6rpx solid #ddd;
+}
+
+.allergy-cleared {
+  border-left-color: #52c41a;
+}
+
+.allergy-observing {
+  border-left-color: #faad14;
+}
+
+.allergy-reaction {
+  border-left-color: #ff4d4f;
+  background: rgba(255, 77, 79, 0.03);
+}
+
+.allergy-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+}
+
+.allergy-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 32rpx;
+  background: rgba(255, 107, 129, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+.allergy-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.allergy-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 6rpx;
+}
+
+.allergy-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-bottom: 6rpx;
+}
+
+.status-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+}
+
+.status-text {
+  font-size: 22rpx;
+  font-weight: 500;
+}
+
+.status-count {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.allergy-action {
+  font-size: 22rpx;
+  color: #999;
+  display: block;
+}
+
+.allergy-section {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.04);
+}
+
+.reaction-tag {
+  font-size: 22rpx;
+  color: #ff4d4f;
+  padding: 4rpx 0;
+  display: block;
+}
+
+.log-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.log-dot {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.04);
+  color: #666;
+  font-size: 20rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 8rpx;
+}
+
+.allergy-footer {
+  margin-top: 16rpx;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ===== 分析 ===== */
+.range-card {
+  display: flex;
+  gap: 12rpx;
+  padding: 16rpx;
+}
+
+.range-btn {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.range-btn.active {
+  background: linear-gradient(135deg, #FF6B81, #FFB5C2);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 营养素 */
+.nutrient-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -8rpx;
+}
+
+.nutrient-item {
+  width: calc(33.333% - 16rpx);
+  margin: 8rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 8rpx;
+  background: rgba(255, 107, 129, 0.05);
+  border-radius: 12rpx;
+  box-sizing: border-box;
+}
+
+.nutrient-label {
+  font-size: 22rpx;
+  color: #666;
+  margin-bottom: 4rpx;
+  text-align: center;
+}
+
+.nutrient-count {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #FF6B81;
+}
+
+/* 分类统计 */
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.category-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.category-label {
+  width: 100rpx;
+  font-size: 22rpx;
+  color: #666;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.category-bar-wrap {
+  flex: 1;
+  height: 20rpx;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+
+.category-bar {
+  height: 100%;
+  border-radius: 10rpx;
+  transition: width 0.5s ease;
+}
+
+.category-count {
+  width: 48rpx;
+  font-size: 22rpx;
+  color: #999;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* 趋势图 */
+.trend-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 200rpx;
+  padding: 16rpx 0 8rpx;
+}
+
+.trend-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.trend-bar-wrap {
+  width: 28rpx;
+  height: 160rpx;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 14rpx;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.trend-bar {
+  width: 100%;
+  border-radius: 14rpx 14rpx 0 0;
+  transition: height 0.5s ease;
+}
+
+.trend-date {
+  font-size: 18rpx;
+  color: #999;
+  margin-top: 6rpx;
+}
+
+/* ===== 百科详情弹窗 ===== */
+.detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.detail-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.detail-sheet {
+  position: relative;
+  background: #FFF5F5;
+  border-radius: 32rpx 32rpx 0 0;
+  max-height: 70vh;
+  overflow-y: auto;
+  animation: slideUp 0.25s ease;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 32rpx;
+  border-bottom: 1rpx solid rgba(255, 107, 129, 0.1);
+  position: sticky;
+  top: 0;
+  background: #FFF5F5;
+  z-index: 10;
+}
+
+.detail-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.detail-close {
+  font-size: 36rpx;
+  color: #999;
+  padding: 8rpx;
+}
+
+.detail-body {
+  padding: 20rpx 32rpx 48rpx;
+}
+
+.detail-row {
+  display: flex;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.04);
+}
+
+.detail-key {
+  width: 140rpx;
+  font-size: 24rpx;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.detail-val {
+  flex: 1;
+  font-size: 26rpx;
+  color: #333;
+  line-height: 1.5;
+}
+
+.detail-val.text-danger {
+  color: #ff4d4f;
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.detail-tag {
+  background: rgba(255, 107, 129, 0.1);
+  color: #FF6B81;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 10rpx;
+}
+
+.detail-row-tips .detail-val {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* ===== 按钮 ===== */
+.btn-primary {
+  width: 100%;
+  height: 84rpx;
+  line-height: 84rpx;
+  background: linear-gradient(135deg, #FF6B81, #FFB5C2);
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 600;
+  border-radius: 42rpx;
+  border: none;
+  margin-top: 24rpx;
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.btn-sm {
+  display: inline-block;
+  height: 56rpx;
+  line-height: 56rpx;
+  padding: 0 24rpx;
+  background: linear-gradient(135deg, #FF6B81, #FFB5C2);
+  color: #fff;
+  font-size: 24rpx;
+  border-radius: 28rpx;
+  border: none;
+}
+
+.btn-sm::after {
+  border: none;
+}
+
+/* ===== Loading ===== */
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100rpx 0;
+}
+
+.loading-spinner {
+  width: 44rpx;
+  height: 44rpx;
+  border: 4rpx solid rgba(255, 107, 129, 0.2);
+  border-top-color: #FF6B81;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

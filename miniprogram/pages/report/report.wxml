@@ -1,0 +1,565 @@
+<view class="page-container">
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <!-- 数据不足提示 -->
+  <view wx:elif="{{!hasEnoughData}}" class="insufficient-data">
+    <view class="insufficient-icon">📊</view>
+    <view class="insufficient-title">数据积累中</view>
+    <view class="insufficient-desc">
+      已记录 {{recordCount}} 条数据，需要至少15条数据才能生成准确的AI评估报告。
+      继续记录宝宝的成长数据吧！
+    </view>
+    <navigator url="/pages/record/record" class="btn-primary" style="display:block;margin-top:40rpx;">
+      去记录
+    </navigator>
+  </view>
+
+  <!-- 无报告，可生成 -->
+  <view wx:elif="{{!report}}" class="generate-section">
+    <view class="generate-card card">
+      <view class="generate-icon">AI</view>
+      <view class="generate-title">智能评估报告</view>
+      <view class="generate-desc">
+        基于您记录的成长数据、发育里程碑和行为模式，
+        AI将为您生成宝宝的五维天赋画像和个性化培养建议。
+      </view>
+      <view class="data-summary">
+        <view class="data-item">
+          <text class="data-num">{{recordCount}}</text>
+          <text class="data-label">条记录</text>
+        </view>
+        <view class="data-item">
+          <text class="data-num">{{babyAge.months}}</text>
+          <text class="data-label">月龄</text>
+        </view>
+      </view>
+      <button class="btn-primary" bindtap="generateReport" loading="{{generating}}">
+        {{generating ? 'AI分析中...' : '生成评估报告'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- 已有报告 -->
+  <view wx:else>
+    <!-- Tab切换 -->
+    <scroll-view scroll-x class="tab-bar">
+      <view class="tab-item {{activeTab === 'basic' ? 'active' : ''}}" data-tab="basic" bindtap="switchTab">基础报告</view>
+      <view class="tab-item {{activeTab === 'trend' ? 'active' : ''}}" data-tab="trend" bindtap="switchTab">趋势预测</view>
+      <view class="tab-item {{activeTab === 'compare' ? 'active' : ''}}" data-tab="compare" bindtap="switchTab">同龄对比</view>
+      <view class="tab-item {{activeTab === 'plan' ? 'active' : ''}}" data-tab="plan" bindtap="switchTab">培养计划</view>
+      <view class="tab-item {{activeTab === 'multi' ? 'active' : ''}}" data-tab="multi" bindtap="switchTab">多宝对比</view>
+    </scroll-view>
+
+    <!-- ========== 基础报告 Tab ========== -->
+    <view wx:if="{{activeTab === 'basic'}}">
+      <!-- 报告头部 -->
+      <view class="report-header card">
+        <view class="report-title-row">
+          <text class="report-title">宝宝成长评估报告</text>
+          <text class="report-date">{{report.createTime}}</text>
+        </view>
+        <view class="report-baby-info">
+          <text class="report-baby-name">{{babyInfo.nickname || '宝宝'}}</text>
+          <text class="report-baby-age">{{babyAge.display}}</text>
+        </view>
+      </view>
+
+      <!-- 总分 -->
+      <view class="total-score-card card">
+        <view class="score-circle-large">
+          <text class="score-num">{{report.totalScore}}</text>
+          <text class="score-label">综合评分</text>
+        </view>
+        <view class="score-level">
+          <text class="level-text">
+            {{report.totalScore >= 80 ? '发育优秀' : report.totalScore >= 60 ? '发育良好' : report.totalScore >= 40 ? '正常发展' : '需要关注'}}
+          </text>
+          <text class="level-desc">在同龄宝宝中处于
+            {{report.totalScore >= 80 ? '前20%' : report.totalScore >= 60 ? '中上水平' : report.totalScore >= 40 ? '中等水平' : '待提升'}}
+          </text>
+        </view>
+      </view>
+
+      <!-- 体格数据 -->
+      <view class="growth-card card" wx:if="{{report.heightPercentile || report.weightPercentile}}">
+        <view class="section-title">体格发育</view>
+        <view class="growth-grid">
+          <view class="growth-item" wx:if="{{report.heightPercentile}}">
+            <text class="growth-label">身高</text>
+            <text class="growth-value">第{{report.heightPercentile}}百分位</text>
+            <view class="growth-bar-bg">
+              <view class="growth-bar" style="width:{{report.heightPercentile}}%"></view>
+            </view>
+          </view>
+          <view class="growth-item" wx:if="{{report.weightPercentile}}">
+            <text class="growth-label">体重</text>
+            <text class="growth-value">第{{report.weightPercentile}}百分位</text>
+            <view class="growth-bar-bg">
+              <view class="growth-bar" style="width:{{report.weightPercentile}}%"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 五维天赋画像 -->
+      <view class="talent-card card">
+        <view class="section-title">五维天赋画像</view>
+        <view class="talent-list">
+          <view class="talent-item" wx:for="{{report.talentScores}}" wx:key="key">
+            <view class="talent-header">
+              <text class="talent-icon">{{item.icon}}</text>
+              <text class="talent-name">{{item.label}}</text>
+              <text class="talent-score">{{item.score}}分</text>
+            </view>
+            <view class="talent-bar-bg">
+              <view class="talent-bar" style="width:{{item.score}}%; background:{{item.score >= 80 ? '#4CAF50' : item.score >= 50 ? '#FF9800' : '#F44336'}}"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 行为洞察 -->
+      <view class="insight-card card" wx:if="{{report.behaviorInsight}}">
+        <view class="section-title">行为洞察</view>
+        <text class="insight-text">{{report.behaviorInsight}}</text>
+      </view>
+
+      <!-- 优势/待发展 -->
+      <view class="domains-card card">
+        <view class="section-title">发展分析</view>
+        <view class="domain-row" wx:if="{{report.strongDomains.length > 0}}">
+          <text class="domain-label">优势领域</text>
+          <view class="domain-tags">
+            <text class="domain-tag strong" wx:for="{{report.strongDomains}}" wx:key="*this">{{item}}</text>
+          </view>
+        </view>
+        <view class="domain-row" wx:if="{{report.weakDomains.length > 0}}">
+          <text class="domain-label">待发展领域</text>
+          <view class="domain-tags">
+            <text class="domain-tag weak" wx:for="{{report.weakDomains}}" wx:key="*this">{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 培养建议 -->
+      <view class="suggestion-card card">
+        <view class="section-title">培养建议</view>
+        <view class="suggestion-list">
+          <view class="suggestion-item" wx:for="{{report.suggestions}}" wx:key="type">
+            <view class="suggestion-icon {{item.type}}">
+              {{item.type === 'strength' ? '⭐' : item.type === 'weakness' ? '💡' : '📋'}}
+            </view>
+            <text class="suggestion-text">{{item.text}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 今日推荐游戏 -->
+      <view class="games-card card">
+        <view class="section-title">今日推荐游戏</view>
+        <view class="game-list">
+          <view class="game-item" wx:for="{{games}}" wx:key="name">
+            <view class="game-header">
+              <text class="game-name">{{item.name}}</text>
+              <text class="game-duration">{{item.duration}}</text>
+            </view>
+            <text class="game-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 操作栏 -->
+      <view class="action-bar">
+        <button class="btn-secondary" bindtap="shareReport">分享报告</button>
+        <button class="btn-primary" bindtap="generateReport" loading="{{generating}}" style="margin-top:20rpx;">
+          重新生成
+        </button>
+      </view>
+    </view>
+
+    <!-- ========== 趋势预测 Tab ========== -->
+    <view wx:if="{{activeTab === 'trend'}}">
+      <view wx:if="{{!trendReport}}" class="ai-empty card">
+        <view class="ai-empty-icon">📈</view>
+        <view class="ai-empty-title">发育趋势预测</view>
+        <view class="ai-empty-desc">基于宝宝的成长数据，AI将预测未来3个月的身高体重发育趋势，帮助您提前了解宝宝的发育走向。</view>
+        <button class="btn-primary" bindtap="generateTrendReport" loading="{{aiLoading}}">
+          {{aiLoading ? 'AI预测中...' : '生成趋势预测'}}
+        </button>
+      </view>
+
+      <view wx:else>
+        <!-- 当前状况 -->
+        <view class="ai-card card">
+          <view class="section-title">当前发育状况</view>
+          <text class="ai-text">{{trendReport.currentStatus}}</text>
+        </view>
+
+        <!-- 身高趋势 -->
+        <view class="ai-card card">
+          <view class="section-title">身高趋势预测</view>
+          <view class="trend-table">
+            <view class="trend-header">
+              <text class="trend-col">月龄</text>
+              <text class="trend-col">预测值</text>
+              <text class="trend-col">WHO均值</text>
+              <text class="trend-col">对比</text>
+            </view>
+            <view class="trend-row" wx:for="{{trendReport.heightTrend}}" wx:key="month">
+              <text class="trend-col">{{item.month}}</text>
+              <text class="trend-col highlight">{{item.predicted}}cm</text>
+              <text class="trend-col">{{item.whoAvg}}cm</text>
+              <text class="trend-col {{item.above ? 'up' : 'down'}}">
+                {{item.above ? '↑' : '↓'}}{{item.absDiff}}cm
+              </text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 体重趋势 -->
+        <view class="ai-card card">
+          <view class="section-title">体重趋势预测</view>
+          <view class="trend-table">
+            <view class="trend-header">
+              <text class="trend-col">月龄</text>
+              <text class="trend-col">预测值</text>
+              <text class="trend-col">WHO均值</text>
+              <text class="trend-col">对比</text>
+            </view>
+            <view class="trend-row" wx:for="{{trendReport.weightTrend}}" wx:key="month">
+              <text class="trend-col">{{item.month}}</text>
+              <text class="trend-col highlight">{{item.predicted}}kg</text>
+              <text class="trend-col">{{item.whoAvg}}kg</text>
+              <text class="trend-col {{item.above ? 'up' : 'down'}}">
+                {{item.above ? '↑' : '↓'}}{{item.absDiff}}kg
+              </text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 发育里程碑预测 -->
+        <view class="ai-card card">
+          <view class="section-title">发育里程碑预测</view>
+          <text class="ai-text">{{trendReport.milestonePrediction}}</text>
+        </view>
+
+        <!-- 风险预警 -->
+        <view class="ai-card card" wx:if="{{trendReport.riskAlerts && trendReport.riskAlerts.length > 0}}">
+          <view class="section-title">关注提醒</view>
+          <view class="alert-list">
+            <view class="alert-item" wx:for="{{trendReport.riskAlerts}}" wx:key="*this">
+              <text class="alert-icon">⚠️</text>
+              <text class="alert-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 总体建议 -->
+        <view class="ai-card card">
+          <view class="section-title">总体建议</view>
+          <text class="ai-text">{{trendReport.advice}}</text>
+        </view>
+
+        <view class="action-bar">
+          <button class="btn-primary" bindtap="generateTrendReport" loading="{{aiLoading}}">重新预测</button>
+        </view>
+      </view>
+
+      <view wx:if="{{aiError}}" class="ai-error">{{aiError}}</view>
+    </view>
+
+    <!-- ========== 同龄对比 Tab ========== -->
+    <view wx:if="{{activeTab === 'compare'}}">
+      <view wx:if="{{!compareReport}}" class="ai-empty card">
+        <view class="ai-empty-icon">👶</view>
+        <view class="ai-empty-title">同龄对比分析</view>
+        <view class="ai-empty-desc">将宝宝的各项发育指标与同月龄宝宝进行对比，了解宝宝在群体中的发育水平。</view>
+        <button class="btn-primary" bindtap="generateCompareReport" loading="{{aiLoading}}">
+          {{aiLoading ? 'AI分析中...' : '生成对比报告'}}
+        </button>
+      </view>
+
+      <view wx:else>
+        <!-- 整体排名 -->
+        <view class="ai-card card highlight-card">
+          <view class="compare-overall">
+            <text class="compare-rank">{{compareReport.overallRanking}}</text>
+            <text class="compare-rank-desc">整体发育水平</text>
+          </view>
+        </view>
+
+        <!-- 体格对比 -->
+        <view class="ai-card card">
+          <view class="section-title">体格发育对比</view>
+          <view class="compare-grid">
+            <view class="compare-item" wx:if="{{compareReport.physicalCompare.height}}">
+              <text class="compare-label">身高</text>
+              <view class="compare-bar-wrap">
+                <view class="compare-bar-bg">
+                  <view class="compare-bar" style="width:{{compareReport.physicalCompare.height.percentile}}%"></view>
+                </view>
+                <text class="compare-percentile">第{{compareReport.physicalCompare.height.percentile}}百分位</text>
+              </view>
+              <text class="compare-level {{compareReport.physicalCompare.height.level === '正常' ? 'normal' : 'warn'}}">
+                {{compareReport.physicalCompare.height.level}}
+              </text>
+              <text class="compare-desc">{{compareReport.physicalCompare.height.description}}</text>
+            </view>
+            <view class="compare-item" wx:if="{{compareReport.physicalCompare.weight}}">
+              <text class="compare-label">体重</text>
+              <view class="compare-bar-wrap">
+                <view class="compare-bar-bg">
+                  <view class="compare-bar" style="width:{{compareReport.physicalCompare.weight.percentile}}%"></view>
+                </view>
+                <text class="compare-percentile">第{{compareReport.physicalCompare.weight.percentile}}百分位</text>
+              </view>
+              <text class="compare-level {{compareReport.physicalCompare.weight.level === '正常' ? 'normal' : 'warn'}}">
+                {{compareReport.physicalCompare.weight.level}}
+              </text>
+              <text class="compare-desc">{{compareReport.physicalCompare.weight.description}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 发育维度对比 -->
+        <view class="ai-card card">
+          <view class="section-title">发育维度对比</view>
+          <view class="dev-compare-list">
+            <view class="dev-compare-item" wx:for="{{compareReport.developmentArray}}" wx:key="key">
+              <view class="dev-compare-header">
+                <text class="dev-compare-name">{{item.label}}</text>
+                <text class="dev-compare-score">{{item.score}}分</text>
+                <text class="dev-compare-level {{item.level === '正常' ? 'normal' : item.level === '超前' ? 'good' : 'warn'}}">
+                  {{item.level}}
+                </text>
+              </view>
+              <text class="dev-compare-desc">{{item.description}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 行为对比 -->
+        <view class="ai-card card">
+          <view class="section-title">日常行为对比</view>
+          <view class="behavior-compare">
+            <view class="behavior-item" wx:if="{{compareReport.behaviorCompare.sleep}}">
+              <text class="behavior-label">😴 睡眠</text>
+              <text class="behavior-level">{{compareReport.behaviorCompare.sleep.level}}</text>
+              <text class="behavior-desc">{{compareReport.behaviorCompare.sleep.description}}</text>
+            </view>
+            <view class="behavior-item" wx:if="{{compareReport.behaviorCompare.feeding}}">
+              <text class="behavior-label">🍼 喂养</text>
+              <text class="behavior-level">{{compareReport.behaviorCompare.feeding.level}}</text>
+              <text class="behavior-desc">{{compareReport.behaviorCompare.feeding.description}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 亮点 -->
+        <view class="ai-card card" wx:if="{{compareReport.highlights.length > 0}}">
+          <view class="section-title">发育亮点</view>
+          <view class="highlight-list">
+            <view class="highlight-item" wx:for="{{compareReport.highlights}}" wx:key="*this">
+              <text class="highlight-icon">✨</text>
+              <text class="highlight-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 关注点 -->
+        <view class="ai-card card" wx:if="{{compareReport.concerns.length > 0}}">
+          <view class="section-title">需要关注</view>
+          <view class="alert-list">
+            <view class="alert-item" wx:for="{{compareReport.concerns}}" wx:key="*this">
+              <text class="alert-icon">💡</text>
+              <text class="alert-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 综合建议 -->
+        <view class="ai-card card">
+          <view class="section-title">综合建议</view>
+          <text class="ai-text">{{compareReport.suggestion}}</text>
+        </view>
+
+        <view class="action-bar">
+          <button class="btn-primary" bindtap="generateCompareReport" loading="{{aiLoading}}">重新对比</button>
+        </view>
+      </view>
+
+      <view wx:if="{{aiError}}" class="ai-error">{{aiError}}</view>
+    </view>
+
+    <!-- ========== 培养计划 Tab ========== -->
+    <view wx:if="{{activeTab === 'plan'}}">
+      <view wx:if="{{!trainingPlan}}" class="ai-empty card">
+        <view class="ai-empty-icon">📋</view>
+        <view class="ai-empty-title">个性化月度培养计划</view>
+        <view class="ai-empty-desc">根据宝宝的发育特点和天赋评估，AI将为您制定下个月的个性化培养方案，包含每周活动、里程碑目标和营养建议。</view>
+        <button class="btn-primary" bindtap="generateTrainingPlan" loading="{{aiLoading}}">
+          {{aiLoading ? 'AI制定中...' : '生成培养计划'}}
+        </button>
+      </view>
+
+      <view wx:else>
+        <!-- 计划概览 -->
+        <view class="ai-card card highlight-card">
+          <view class="plan-title">{{trainingPlan.planTitle}}</view>
+          <text class="ai-text">{{trainingPlan.summary}}</text>
+          <view class="focus-areas">
+            <text class="focus-tag" wx:for="{{trainingPlan.focusAreas}}" wx:key="*this">{{item}}</text>
+          </view>
+        </view>
+
+        <!-- 周计划 -->
+        <view class="ai-card card" wx:for="{{trainingPlan.weeklyPlan}}" wx:key="week">
+          <view class="section-title">{{item.week}} · {{item.theme}}</view>
+          <view class="activity-list">
+            <view class="activity-item" wx:for="{{item.activities}}" wx:key="name" wx:for-item="act">
+              <view class="activity-header">
+                <text class="activity-name">{{act.name}}</text>
+                <text class="activity-meta">{{act.duration}} · {{act.frequency}}</text>
+              </view>
+              <text class="activity-desc">{{act.desc}}</text>
+              <view class="activity-tip" wx:if="{{act.tip}}">
+                <text class="tip-icon">💡</text>
+                <text class="tip-text">{{act.tip}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 里程碑目标 -->
+        <view class="ai-card card">
+          <view class="section-title">本月里程碑目标</view>
+          <view class="goal-list">
+            <view class="goal-item" wx:for="{{trainingPlan.milestoneGoals}}" wx:key="*this">
+              <text class="goal-icon">🎯</text>
+              <text class="goal-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 营养与睡眠建议 -->
+        <view class="ai-card card">
+          <view class="section-title">营养建议</view>
+          <text class="ai-text">{{trainingPlan.nutritionAdvice}}</text>
+        </view>
+
+        <view class="ai-card card">
+          <view class="section-title">睡眠建议</view>
+          <text class="ai-text">{{trainingPlan.sleepAdvice}}</text>
+        </view>
+
+        <!-- 预警信号 -->
+        <view class="ai-card card" wx:if="{{trainingPlan.warningSigns.length > 0}}">
+          <view class="section-title">需要警惕的信号</view>
+          <view class="alert-list">
+            <view class="alert-item" wx:for="{{trainingPlan.warningSigns}}" wx:key="*this">
+              <text class="alert-icon">⚠️</text>
+              <text class="alert-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 鼓励语 -->
+        <view class="ai-card card encourage-card">
+          <text class="encourage-text">{{trainingPlan.encouragement}}</text>
+        </view>
+
+        <view class="action-bar">
+          <button class="btn-primary" bindtap="generateTrainingPlan" loading="{{aiLoading}}">重新生成</button>
+        </view>
+      </view>
+
+      <view wx:if="{{aiError}}" class="ai-error">{{aiError}}</view>
+    </view>
+
+    <!-- ========== 多宝对比 Tab ========== -->
+    <view wx:if="{{activeTab === 'multi'}}">
+      <view wx:if="{{otherBabies.length === 0}}" class="ai-empty card">
+        <view class="ai-empty-icon">👶👶</view>
+        <view class="ai-empty-title">多宝对比</view>
+        <view class="ai-empty-desc">添加另一个宝宝后，AI将对比分析两个宝宝的发育差异，帮助您了解每个宝宝的特点。</view>
+        <navigator url="/pages/profile/profile" class="btn-primary" style="display:block;margin-top:40rpx;">去添加宝宝</navigator>
+      </view>
+
+      <view wx:elif="{{!multiBabyReport}}" class="ai-empty card">
+        <view class="ai-empty-icon">👶👶</view>
+        <view class="ai-empty-title">多宝对比分析</view>
+        <view class="ai-empty-desc">对比{{babyInfo.nickname || '宝宝'}}与其他宝宝的发育数据，了解各自的优势和发展方向。</view>
+        <button class="btn-primary" bindtap="generateMultiBabyCompare" loading="{{aiLoading}}">
+          {{aiLoading ? 'AI分析中...' : '选择宝宝并对比'}}
+        </button>
+      </view>
+
+      <view wx:else>
+        <!-- 对比总结 -->
+        <view class="ai-card card highlight-card">
+          <view class="section-title">对比总结</view>
+          <text class="ai-text">{{multiBabyReport.summary}}</text>
+        </view>
+
+        <!-- 各维度对比 -->
+        <view class="ai-card card" wx:for="{{multiBabyReport.comparisons}}" wx:key="dimension">
+          <view class="section-title">{{item.dimension}}</view>
+          <view class="compare-babies">
+            <view class="compare-baby">
+              <text class="compare-baby-label">{{babyInfo.nickname || '宝宝1'}}</text>
+              <text class="compare-baby-val">{{item.baby1}}</text>
+            </view>
+            <view class="compare-vs">VS</view>
+            <view class="compare-baby">
+              <text class="compare-baby-label">宝宝2</text>
+              <text class="compare-baby-val">{{item.baby2}}</text>
+            </view>
+          </view>
+          <text class="compare-analysis">{{item.analysis}}</text>
+        </view>
+
+        <!-- 各自优势 -->
+        <view class="ai-card card">
+          <view class="section-title">{{babyInfo.nickname || '宝宝'}}的优势</view>
+          <view class="highlight-list">
+            <view class="highlight-item" wx:for="{{multiBabyReport.baby1Strengths}}" wx:key="*this">
+              <text class="highlight-icon">✨</text>
+              <text class="highlight-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="ai-card card">
+          <view class="section-title">另一个宝宝的优势</view>
+          <view class="highlight-list">
+            <view class="highlight-item" wx:for="{{multiBabyReport.baby2Strengths}}" wx:key="*this">
+              <text class="highlight-icon">✨</text>
+              <text class="highlight-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 建议 -->
+        <view class="ai-card card">
+          <view class="section-title">给家长的建议</view>
+          <view class="suggestion-list">
+            <view class="suggestion-item" wx:for="{{multiBabyReport.suggestions}}" wx:key="*this">
+              <view class="suggestion-icon general">📋</view>
+              <text class="suggestion-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="action-bar">
+          <button class="btn-primary" bindtap="generateMultiBabyCompare" loading="{{aiLoading}}">重新对比</button>
+        </view>
+      </view>
+
+      <view wx:if="{{aiError}}" class="ai-error">{{aiError}}</view>
+    </view>
+  </view>
+</view>

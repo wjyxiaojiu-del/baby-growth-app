@@ -1,0 +1,458 @@
+.page-container { padding-bottom: 120rpx; }
+
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid rgba(255, 213, 219, 0.5);
+  border-top-color: #FF6B81;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 数据不足 */
+.insufficient-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 48rpx;
+}
+
+.insufficient-icon { font-size: 80rpx; margin-bottom: 32rpx; }
+.insufficient-title { font-size: 36rpx; font-weight: 700; color: #333; margin-bottom: 20rpx; }
+.insufficient-desc { font-size: 28rpx; color: #888; text-align: center; line-height: 1.6; }
+
+/* 生成入口 */
+.generate-section { padding: 48rpx 24rpx; }
+
+.generate-card {
+  text-align: center;
+  background: rgba(255, 240, 242, 0.6);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  border: 1rpx solid rgba(255, 213, 219, 0.4);
+}
+
+.generate-icon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B81, #FF8E9E);
+  color: #FFF;
+  font-size: 40rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 129, 0.3);
+}
+
+.generate-title { font-size: 36rpx; font-weight: 700; color: #333; margin-bottom: 16rpx; }
+.generate-desc { font-size: 26rpx; color: #666; line-height: 1.6; margin-bottom: 32rpx; }
+
+.data-summary { display: flex; justify-content: center; gap: 80rpx; margin-bottom: 40rpx; }
+.data-item { display: flex; flex-direction: column; align-items: center; }
+.data-num { font-size: 48rpx; font-weight: 700; color: #FF6B81; }
+.data-label { font-size: 24rpx; color: #999; }
+
+/* ========== Tab栏 ========== */
+.tab-bar {
+  display: flex;
+  background: #FFF;
+  padding: 16rpx 12rpx;
+  gap: 8rpx;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1rpx solid rgba(255, 181, 194, 0.2);
+  white-space: nowrap;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 8rpx;
+  font-size: 24rpx;
+  color: #888;
+  border-radius: 24rpx;
+  transition: all 0.3s;
+  flex-shrink: 0;
+  min-width: 120rpx;
+}
+
+.tab-item.active {
+  background: linear-gradient(135deg, #FF6B81, #FF8E9E);
+  color: #FFF;
+  font-weight: 600;
+  box-shadow: 0 4rpx 12rpx rgba(255, 107, 129, 0.3);
+}
+
+/* 报告头部 — 深色毛玻璃 */
+.report-header {
+  background: rgba(255, 107, 129, 0.85);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  color: #FFF;
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.report-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.report-title { font-size: 36rpx; font-weight: 700; }
+.report-date { font-size: 22rpx; opacity: 0.8; }
+.report-baby-info { display: flex; gap: 24rpx; }
+.report-baby-name { font-size: 30rpx; font-weight: 600; }
+.report-baby-age { font-size: 26rpx; opacity: 0.9; }
+
+/* 总分 */
+.total-score-card { display: flex; align-items: center; gap: 40rpx; }
+
+.score-circle-large {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B81, #FF8E9E);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8rpx 32rpx rgba(255, 107, 129, 0.3);
+}
+
+.score-num { font-size: 60rpx; font-weight: 700; color: #FFF; line-height: 1; }
+.score-label { font-size: 20rpx; color: rgba(255,255,255,0.8); margin-top: 4rpx; }
+.score-level { flex: 1; }
+.level-text { display: block; font-size: 34rpx; font-weight: 700; color: #333; }
+.level-desc { display: block; font-size: 26rpx; color: #888; margin-top: 8rpx; }
+
+.section-title { font-size: 30rpx; font-weight: 600; color: #333; margin-bottom: 24rpx; }
+
+/* 体格发育 */
+.growth-grid { display: flex; flex-direction: column; gap: 20rpx; }
+.growth-item { display: flex; align-items: center; gap: 16rpx; }
+.growth-label { width: 60rpx; font-size: 26rpx; color: #666; }
+.growth-value { width: 140rpx; font-size: 26rpx; color: #333; font-weight: 600; }
+
+.growth-bar-bg {
+  flex: 1;
+  height: 16rpx;
+  background: rgba(245, 230, 232, 0.5);
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.growth-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #FFB5C2, #FF6B81);
+  border-radius: 8rpx;
+}
+
+/* 五维天赋 */
+.talent-list { display: flex; flex-direction: column; gap: 24rpx; }
+.talent-item { display: flex; flex-direction: column; gap: 12rpx; }
+.talent-header { display: flex; align-items: center; gap: 12rpx; }
+.talent-icon { font-size: 32rpx; }
+.talent-name { flex: 1; font-size: 28rpx; font-weight: 600; color: #333; }
+.talent-score { font-size: 28rpx; font-weight: 700; color: #FF6B81; }
+
+.talent-bar-bg {
+  height: 20rpx;
+  background: rgba(245, 230, 232, 0.5);
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+
+.talent-bar { height: 100%; border-radius: 10rpx; transition: width 0.8s ease; }
+
+/* 行为洞察 */
+.insight-text { font-size: 28rpx; color: #555; line-height: 1.6; }
+
+/* 发展分析 */
+.domain-row { display: flex; align-items: flex-start; margin-bottom: 20rpx; }
+.domain-row:last-child { margin-bottom: 0; }
+.domain-label { width: 140rpx; font-size: 26rpx; color: #666; flex-shrink: 0; }
+.domain-tags { display: flex; flex-wrap: wrap; gap: 12rpx; }
+
+.domain-tag {
+  padding: 8rpx 24rpx;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.domain-tag.strong { background: rgba(232, 245, 233, 0.7); color: #2E7D32; }
+.domain-tag.weak { background: rgba(255, 243, 224, 0.7); color: #E65100; }
+
+/* 培养建议 */
+.suggestion-list { display: flex; flex-direction: column; gap: 24rpx; }
+.suggestion-item { display: flex; gap: 16rpx; }
+
+.suggestion-icon {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+.suggestion-icon.strength { background: rgba(232, 245, 233, 0.6); }
+.suggestion-icon.weakness { background: rgba(255, 243, 224, 0.6); }
+.suggestion-icon.general { background: rgba(227, 242, 253, 0.6); }
+
+.suggestion-text { font-size: 28rpx; color: #555; line-height: 1.6; flex: 1; }
+
+/* 推荐游戏 */
+.game-list { display: flex; flex-direction: column; gap: 20rpx; }
+
+.game-item {
+  background: rgba(255, 248, 249, 0.5);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.5);
+}
+
+.game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8rpx; }
+.game-name { font-size: 28rpx; font-weight: 600; color: #333; }
+
+.game-duration {
+  font-size: 24rpx;
+  color: #FF6B81;
+  background: rgba(255, 228, 232, 0.6);
+  padding: 4rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+.game-desc { font-size: 26rpx; color: #888; }
+
+.action-bar { padding: 32rpx 24rpx; }
+
+/* ========== AI深度评估通用 ========== */
+.ai-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 48rpx;
+  text-align: center;
+  margin: 24rpx;
+}
+
+.ai-empty-icon { font-size: 80rpx; margin-bottom: 24rpx; }
+.ai-empty-title { font-size: 36rpx; font-weight: 700; color: #333; margin-bottom: 16rpx; }
+.ai-empty-desc { font-size: 26rpx; color: #888; line-height: 1.6; margin-bottom: 40rpx; }
+
+.ai-error {
+  text-align: center;
+  padding: 24rpx;
+  color: #F44336;
+  font-size: 26rpx;
+}
+
+.ai-card {
+  margin: 24rpx;
+  padding: 32rpx;
+  background: #FFF;
+  border-radius: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+
+.ai-card.highlight-card {
+  background: linear-gradient(135deg, rgba(255,107,129,0.08), rgba(255,181,194,0.12));
+  border: 1rpx solid rgba(255,107,129,0.15);
+}
+
+.ai-text { font-size: 28rpx; color: #555; line-height: 1.8; }
+
+/* ========== 趋势预测 ========== */
+.trend-table {
+  border-radius: 16rpx;
+  overflow: hidden;
+  border: 1rpx solid rgba(255,181,194,0.3);
+}
+
+.trend-header {
+  display: flex;
+  background: rgba(255,107,129,0.08);
+  padding: 16rpx 0;
+}
+
+.trend-header .trend-col {
+  flex: 1;
+  text-align: center;
+  font-size: 24rpx;
+  color: #888;
+  font-weight: 600;
+}
+
+.trend-row {
+  display: flex;
+  padding: 20rpx 0;
+  border-top: 1rpx solid rgba(255,181,194,0.15);
+}
+
+.trend-row .trend-col {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  color: #555;
+}
+
+.trend-col.highlight { color: #FF6B81; font-weight: 600; }
+.trend-col.up { color: #4CAF50; font-size: 24rpx; }
+.trend-col.down { color: #FF9800; font-size: 24rpx; }
+
+/* ========== 同龄对比 ========== */
+.compare-overall {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 0;
+}
+
+.compare-rank {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #FF6B81;
+  margin-bottom: 8rpx;
+}
+
+.compare-rank-desc { font-size: 24rpx; color: #888; }
+
+.compare-grid { display: flex; flex-direction: column; gap: 32rpx; }
+
+.compare-item { display: flex; flex-direction: column; gap: 12rpx; }
+.compare-label { font-size: 28rpx; font-weight: 600; color: #333; }
+
+.compare-bar-wrap { display: flex; align-items: center; gap: 16rpx; }
+.compare-bar-bg {
+  flex: 1;
+  height: 20rpx;
+  background: rgba(245,230,232,0.5);
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+.compare-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #FFB5C2, #FF6B81);
+  border-radius: 10rpx;
+}
+.compare-percentile { font-size: 24rpx; color: #FF6B81; font-weight: 600; width: 140rpx; text-align: right; }
+
+.compare-level {
+  font-size: 24rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 12rpx;
+  align-self: flex-start;
+}
+.compare-level.normal { background: rgba(232,245,233,0.7); color: #2E7D32; }
+.compare-level.warn { background: rgba(255,243,224,0.7); color: #E65100; }
+.compare-level.good { background: rgba(227,242,253,0.7); color: #1565C0; }
+
+.compare-desc { font-size: 26rpx; color: #666; line-height: 1.5; }
+
+.dev-compare-list { display: flex; flex-direction: column; gap: 24rpx; }
+.dev-compare-item { padding-bottom: 24rpx; border-bottom: 1rpx solid rgba(0,0,0,0.04); }
+.dev-compare-item:last-child { border-bottom: none; padding-bottom: 0; }
+.dev-compare-header { display: flex; align-items: center; gap: 16rpx; margin-bottom: 8rpx; }
+.dev-compare-name { font-size: 28rpx; font-weight: 600; color: #333; flex: 1; }
+.dev-compare-score { font-size: 28rpx; font-weight: 700; color: #FF6B81; }
+.dev-compare-level { font-size: 22rpx; padding: 4rpx 12rpx; border-radius: 10rpx; }
+.dev-compare-level.normal { background: rgba(232,245,233,0.7); color: #2E7D32; }
+.dev-compare-level.good { background: rgba(227,242,253,0.7); color: #1565C0; }
+.dev-compare-level.warn { background: rgba(255,243,224,0.7); color: #E65100; }
+.dev-compare-desc { font-size: 26rpx; color: #666; line-height: 1.5; }
+
+.behavior-compare { display: flex; flex-direction: column; gap: 24rpx; }
+.behavior-item { display: flex; flex-direction: column; gap: 8rpx; }
+.behavior-label { font-size: 28rpx; font-weight: 600; color: #333; }
+.behavior-level { font-size: 26rpx; color: #FF6B81; font-weight: 600; }
+.behavior-desc { font-size: 26rpx; color: #666; line-height: 1.5; }
+
+.highlight-list { display: flex; flex-direction: column; gap: 16rpx; }
+.highlight-item { display: flex; align-items: flex-start; gap: 12rpx; }
+.highlight-icon { font-size: 28rpx; flex-shrink: 0; }
+.highlight-text { font-size: 28rpx; color: #555; line-height: 1.5; }
+
+.alert-list { display: flex; flex-direction: column; gap: 16rpx; }
+.alert-item { display: flex; align-items: flex-start; gap: 12rpx; }
+.alert-icon { font-size: 28rpx; flex-shrink: 0; }
+.alert-text { font-size: 28rpx; color: #555; line-height: 1.5; }
+
+/* ========== 培养计划 ========== */
+.plan-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #FF6B81;
+  margin-bottom: 16rpx;
+}
+
+.focus-areas { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 20rpx; }
+.focus-tag {
+  padding: 8rpx 24rpx;
+  background: rgba(255,107,129,0.1);
+  color: #FF6B81;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+}
+
+.activity-list { display: flex; flex-direction: column; gap: 20rpx; }
+.activity-item {
+  padding: 20rpx;
+  background: rgba(255,248,249,0.5);
+  border-radius: 16rpx;
+}
+.activity-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8rpx; }
+.activity-name { font-size: 28rpx; font-weight: 600; color: #333; }
+.activity-meta { font-size: 22rpx; color: #FF6B81; }
+.activity-desc { font-size: 26rpx; color: #666; line-height: 1.5; margin-bottom: 8rpx; }
+.activity-tip { display: flex; align-items: flex-start; gap: 8rpx; padding: 12rpx; background: rgba(255,243,224,0.4); border-radius: 12rpx; }
+.tip-icon { font-size: 24rpx; flex-shrink: 0; }
+.tip-text { font-size: 24rpx; color: #E65100; line-height: 1.5; }
+
+.goal-list { display: flex; flex-direction: column; gap: 16rpx; }
+.goal-item { display: flex; align-items: flex-start; gap: 12rpx; }
+.goal-icon { font-size: 28rpx; flex-shrink: 0; }
+.goal-text { font-size: 28rpx; color: #555; line-height: 1.5; }
+
+.encourage-card {
+  background: linear-gradient(135deg, rgba(255,107,129,0.06), rgba(255,181,194,0.1));
+  text-align: center;
+  border: 1rpx solid rgba(255,107,129,0.1);
+}
+.encourage-text { font-size: 30rpx; color: #FF6B81; font-weight: 600; line-height: 1.8; }
+
+/* ========== 多宝对比 ========== */
+.compare-babies { display: flex; align-items: stretch; gap: 16rpx; margin-bottom: 16rpx; }
+.compare-baby {
+  flex: 1; padding: 20rpx; border-radius: 16rpx;
+  background: rgba(255,245,245,0.5); text-align: center;
+}
+.compare-baby-label { display: block; font-size: 24rpx; color: #FF6B81; font-weight: 600; margin-bottom: 8rpx; }
+.compare-baby-val { display: block; font-size: 26rpx; color: #333; line-height: 1.5; }
+.compare-vs {
+  display: flex; align-items: center; font-size: 24rpx;
+  color: #CCC; font-weight: 700; flex-shrink: 0;
+}
+.compare-analysis { font-size: 26rpx; color: #666; line-height: 1.6; }

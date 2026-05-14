@@ -1,0 +1,50 @@
+<view class="page-container">
+  <!-- 头像 -->
+  <view class="avatar-section" bindtap="chooseAvatar">
+    <view class="avatar-wrap">
+      <image class="avatar-img" src="{{form.avatar || '/images/baby-default.png'}}" mode="aspectFill" />
+      <view class="avatar-edit-icon">📷</view>
+    </view>
+    <text class="avatar-hint">点击更换头像</text>
+  </view>
+
+  <!-- 表单 -->
+  <view class="form-card card">
+    <view class="form-row">
+      <text class="form-label">宝宝昵称</text>
+      <input class="form-input" placeholder="如: 小豆豆" value="{{form.nickname}}" bindinput="onNicknameInput" maxlength="10" />
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">性别</text>
+      <view class="gender-grid">
+        <view
+          wx:for="{{genderOptions}}"
+          wx:key="key"
+          class="gender-item {{form.gender === item.key ? 'active' : ''}}"
+          bindtap="onGenderChange"
+          data-key="{{item.key}}"
+        >
+          <text class="gender-icon">{{item.icon}}</text>
+          <text class="gender-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">出生日期</text>
+      <picker mode="date" value="{{form.birthDate}}" end="2026-12-31" bindchange="onBirthDateChange">
+        <view class="form-picker {{form.birthDate ? '' : 'placeholder'}}">
+          {{form.birthDate || '请选择出生日期'}}
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="action-bar">
+    <button class="btn-primary" bindtap="saveBabyInfo" loading="{{saving}}">
+      {{isEdit ? '保存修改' : '确认添加'}}
+    </button>
+  </view>
+</view>

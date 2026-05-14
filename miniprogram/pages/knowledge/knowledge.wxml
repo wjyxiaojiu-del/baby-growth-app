@@ -1,0 +1,87 @@
+<view class="page-container">
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+  </view>
+
+  <block wx:else>
+    <!-- Tab切换 -->
+    <view class="tab-bar">
+      <view class="tab-item {{activeTab === 'articles' ? 'active' : ''}}" data-tab="articles" bindtap="switchTab">月龄知识</view>
+      <view class="tab-item {{activeTab === 'favorites' ? 'active' : ''}}" data-tab="favorites" bindtap="switchTab">我的收藏</view>
+      <view class="tab-item {{activeTab === 'chat' ? 'active' : ''}}" data-tab="chat" bindtap="switchTab">AI问答</view>
+    </view>
+
+    <!-- 月龄知识 -->
+    <view wx:if="{{activeTab === 'articles'}}" class="content-area">
+      <view class="month-badge card">
+        <text class="badge-text">{{babyAge.months}}月龄相关知识</text>
+      </view>
+      <view class="article-list">
+        <view class="article-card card" wx:for="{{articles}}" wx:key="id" data-id="{{item.id}}" bindtap="viewArticle">
+          <view class="article-icon">{{item.icon}}</view>
+          <view class="article-info">
+            <text class="article-title">{{item.title}}</text>
+            <text class="article-category">{{item.category}}</text>
+            <text class="article-summary">{{item.summary}}</text>
+          </view>
+          <text class="article-arrow">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 我的收藏 -->
+    <view wx:if="{{activeTab === 'favorites'}}" class="content-area">
+      <view wx:if="{{favorites.length === 0}}" class="empty-state">
+        <text class="empty-icon">📚</text>
+        <text class="empty-title">还没有收藏</text>
+        <text class="empty-desc">阅读知识文章时点击「收藏」按钮</text>
+      </view>
+      <view class="article-list">
+        <view class="article-card card" wx:for="{{favorites}}" wx:key="_id">
+          <view class="article-icon">{{item.icon}}</view>
+          <view class="article-info" data-id="{{item.articleId}}" bindtap="viewArticle">
+            <text class="article-title">{{item.title}}</text>
+            <text class="article-category">{{item.category}}</text>
+            <text class="article-summary">{{item.summary}}</text>
+          </view>
+          <view class="unfav-btn" data-id="{{item.articleId}}" bindtap="unfavorite">✕</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- AI问答 -->
+    <view wx:if="{{activeTab === 'chat'}}" class="content-area chat-area">
+      <view wx:if="{{chatMessages.length === 0}}" class="chat-empty">
+        <text class="chat-empty-icon">🤖</text>
+        <text class="chat-empty-title">AI育儿顾问</text>
+        <text class="chat-empty-desc">有任何育儿问题都可以问我</text>
+        <view class="quick-questions">
+          <view class="quick-q" data-q="{{babyAge.months}}月龄宝宝每天应该睡多久？" bindtap="sendQuickQ">睡眠时长</view>
+          <view class="quick-q" data-q="{{babyAge.months}}月龄可以添加哪些辅食？" bindtap="sendQuickQ">辅食建议</view>
+          <view class="quick-q" data-q="宝宝总是哭闹怎么办？" bindtap="sendQuickQ">哭闹应对</view>
+          <view class="quick-q" data-q="{{babyAge.months}}月龄应该会什么技能？" bindtap="sendQuickQ">发育标准</view>
+        </view>
+      </view>
+
+      <scroll-view scroll-y class="chat-messages" scroll-into-view="{{chatMessages.length > 0 ? 'msg-' + (chatMessages.length - 1) : ''}}">
+        <view wx:for="{{chatMessages}}" wx:key="index" id="msg-{{index}}" class="chat-msg {{item.role === 'user' ? 'user' : 'ai'}}">
+          <view class="msg-avatar">{{item.role === 'user' ? '👤' : '🤖'}}</view>
+          <view class="msg-bubble">
+            <text class="msg-text">{{item.content}}</text>
+          </view>
+        </view>
+        <view wx:if="{{chatLoading}}" class="chat-msg ai" id="msg-{{chatMessages.length}}">
+          <view class="msg-avatar">🤖</view>
+          <view class="msg-bubble">
+            <text class="msg-text">思考中...</text>
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="chat-input-bar">
+        <input class="chat-input" placeholder="输入育儿问题..." value="{{chatInput}}" bindinput="onChatInput" bindconfirm="sendQuestion" />
+        <view class="chat-send" bindtap="sendQuestion">发送</view>
+      </view>
+    </view>
+  </block>
+</view>

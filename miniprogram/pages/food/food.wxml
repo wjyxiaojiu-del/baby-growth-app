@@ -1,0 +1,330 @@
+<view class="page-container">
+
+  <!-- ===== Tab 栏（与 record 页面统一风格）===== -->
+  <view class="tab-bar">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="key"
+      class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+      data-key="{{item.key}}"
+      bindtap="onTabChange"
+    >
+      <text class="tab-label">{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- ==================== 日历 ==================== -->
+  <block wx:if="{{activeTab === 'calendar'}}">
+    <view class="tab-content">
+
+      <!-- 周视图 -->
+      <view class="card week-calendar">
+        <view
+          wx:for="{{weekDates}}"
+          wx:key="date"
+          class="week-day {{selectedDate === item.date ? 'selected' : ''}} {{item.isToday ? 'today-mark' : ''}}"
+          data-date="{{item.date}}"
+          bindtap="onSelectDate"
+        >
+          <text class="week-day-name">{{item.dayName}}</text>
+          <text class="week-day-num">{{item.dayNum}}</text>
+        </view>
+      </view>
+
+      <!-- 记录列表 -->
+      <view class="card" wx:if="{{!todayLogsEmpty}}">
+        <view class="section-header">
+          <text class="section-title">{{selectedDate}} 辅食记录</text>
+          <view class="score-pill">
+            <text class="score-pill-label">多样性</text>
+            <text class="score-pill-value">{{diversityScore}}</text>
+          </view>
+        </view>
+        <view class="log-list">
+          <view wx:for="{{todayLogs}}" wx:key="_id" class="log-item">
+            <view class="log-icon" style="background:{{item._categoryColor}}">
+              <text>{{item._categoryIcon}}</text>
+            </view>
+            <view class="log-body">
+              <text class="log-name">{{item.foodName}}</text>
+              <text class="log-meta">{{item.mealTime}} {{item.amount}}</text>
+            </view>
+            <view class="log-actions">
+              <view
+                class="action-btn {{item.hasReaction ? 'reaction-active' : ''}}"
+                data-log-id="{{item._id}}"
+                data-food-id="{{item.foodId}}"
+                bindtap="onMarkReaction"
+              >
+                <text>{{item.hasReaction ? '⚠️' : '✓'}}</text>
+              </view>
+              <view class="action-btn delete-btn" data-id="{{item._id}}" bindtap="onDeleteLog">
+                <text>🗑️</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="card empty-card" wx:if="{{todayLogsEmpty}}">
+        <text class="empty-icon">🍽️</text>
+        <text class="empty-title">今天还没有记录辅食</text>
+        <text class="empty-desc">点击下方推荐食物快速添加</text>
+      </view>
+
+      <!-- 今日推荐 -->
+      <view class="card suggestion-card" wx:if="{{hasSuggestion}}">
+        <text class="section-title">💡 今日推荐</text>
+        <text class="suggestion-tips" wx:if="{{suggestionTips}}">{{suggestionTips}}</text>
+        <view class="suggestion-chips">
+          <view wx:if="{{suggestionMain}}" class="chip chip-primary" data-id="{{suggestionMain.id}}" bindtap="onQuickAdd">
+            <text class="chip-icon">{{suggestionMain.icon}}</text>
+            <text>{{suggestionMain.name}}</text>
+            <text class="chip-plus">+</text>
+          </view>
+          <view wx:for="{{suggestionSides}}" wx:key="id" class="chip" data-id="{{item.id}}" bindtap="onQuickAdd">
+            <text class="chip-icon">{{item.icon}}</text>
+            <text>{{item.name}}</text>
+            <text class="chip-plus">+</text>
+          </view>
+          <view wx:if="{{suggestionFruit}}" class="chip chip-fruit" data-id="{{suggestionFruit.id}}" bindtap="onQuickAdd">
+            <text class="chip-icon">{{suggestionFruit.icon}}</text>
+            <text>{{suggestionFruit.name}}</text>
+            <text class="chip-plus">+</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 未开始提示 -->
+      <view class="card info-card" wx:if="{{!canAddFood}}">
+        <text class="info-icon">👶</text>
+        <text class="info-text">宝宝当前 {{babyMonths}} 月龄，建议满6个月后再开始添加辅食。</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- ==================== 百科 ==================== -->
+  <block wx:if="{{activeTab === 'encyclopedia'}}">
+    <view class="tab-content">
+      <!-- 搜索 -->
+      <view class="card search-card">
+        <input
+          class="search-input"
+          placeholder="搜索食材，如：胡萝卜、鳕鱼..."
+          value="{{searchKeyword}}"
+          bindinput="onSearchInput"
+        />
+        <text class="search-icon">🔍</text>
+      </view>
+
+      <!-- 分类筛选 -->
+      <scroll-view class="category-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+        <view
+          class="filter-pill {{activeCategory === 'ALL' ? 'active' : ''}}"
+          data-category="ALL"
+          bindtap="onCategoryTap"
+        >全部</view>
+        <view
+          wx:for="{{categoryList}}"
+          wx:key="key"
+          class="filter-pill {{activeCategory === item.key ? 'active' : ''}}"
+          data-category="{{item.key}}"
+          bindtap="onCategoryTap"
+        >{{item.icon}} {{item.label}}</view>
+      </scroll-view>
+
+      <!-- 食物列表（flex 两列） -->
+      <view class="food-list">
+        <view
+          wx:for="{{filteredFoodList}}"
+          wx:key="id"
+          class="food-item {{item._canEat ? '' : 'disabled'}}"
+          data-id="{{item.id}}"
+          bindtap="onSelectFood"
+        >
+          <view class="food-icon" style="background:{{item._categoryColor}}">
+            <text>{{item._categoryIcon}}</text>
+          </view>
+          <text class="food-name">{{item.name}}</text>
+          <text class="food-month">{{item.startMonth}}月龄+</text>
+          <view wx:if="{{item.allergen !== 'NONE'}}" class="food-badge">
+            <text>{{item._allergenLabel}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="card empty-card" wx:if="{{filteredFoodList.length === 0}}">
+        <text class="empty-title">没有找到相关食材</text>
+        <text class="empty-desc">换个关键词试试</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- ==================== 排敏 ==================== -->
+  <block wx:if="{{activeTab === 'allergy'}}">
+    <view class="tab-content">
+      <view class="loading-wrap" wx:if="{{allergyLoading}}">
+        <view class="loading-spinner"></view>
+      </view>
+
+      <view wx:if="{{!allergyLoading}}">
+        <view class="card empty-card" wx:if="{{allergyEmpty}}">
+          <text class="empty-icon">🌿</text>
+          <text class="empty-title">还没有辅食记录</text>
+          <text class="empty-desc">先在「记录」页添加食物吧</text>
+        </view>
+
+        <view
+          wx:for="{{allergyList}}"
+          wx:key="foodId"
+          class="card allergy-card allergy-{{item.statusKey}}"
+        >
+          <view class="allergy-header">
+            <view class="allergy-icon">{{item._categoryIcon}}</view>
+            <view class="allergy-info">
+              <text class="allergy-name">{{item.foodName}}</text>
+              <view class="allergy-status-row">
+                <view class="status-dot" style="background:{{item.statusColor}}"></view>
+                <text class="status-text" style="color:{{item.statusColor}}">{{item.statusLabel}}</text>
+                <text wx:if="{{item.statusKey === 'observing'}}" class="status-count">{{item.daysObserved}}/3天</text>
+              </view>
+              <text class="allergy-action">{{item.nextAction}}</text>
+            </view>
+          </view>
+
+          <view class="allergy-section" wx:if="{{item.hasReactions}}">
+            <text class="section-subtitle">不良反应</text>
+            <view wx:for="{{item.reactions}}" wx:key="*this" class="reaction-tag">
+              {{item.date}} — {{item.symptom}}
+            </view>
+          </view>
+
+          <view class="allergy-section" wx:if="{{item.logs.length > 0}}">
+            <text class="section-subtitle">近期食用</text>
+            <view class="log-dots">
+              <text wx:for="{{item.logs}}" wx:key="*this" class="log-dot">{{item}}</text>
+            </view>
+          </view>
+
+          <view class="allergy-footer" wx:if="{{item.statusKey === 'new' || item.statusKey === 'observing'}}">
+            <view class="btn-sm" data-id="{{item.foodId}}" bindtap="onQuickAdd">记录食用</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- ==================== 分析 ==================== -->
+  <block wx:if="{{activeTab === 'analysis'}}">
+    <view class="tab-content">
+      <view class="loading-wrap" wx:if="{{analysisLoading}}">
+        <view class="loading-spinner"></view>
+      </view>
+
+      <view wx:if="{{!analysisLoading}}">
+        <!-- 时间范围 -->
+        <view class="card range-card">
+          <view class="range-btn {{analysisRange === 'week' ? 'active' : ''}}" data-range="week" bindtap="onRangeChange">近7天</view>
+          <view class="range-btn {{analysisRange === 'month' ? 'active' : ''}}" data-range="month" bindtap="onRangeChange">近30天</view>
+        </view>
+
+        <!-- 营养素 -->
+        <view class="card">
+          <text class="section-title">🥗 营养素覆盖</text>
+          <view class="empty-mini" wx:if="{{analysisNutrientsEmpty}}">
+            <text>暂无记录，无法分析</text>
+          </view>
+          <view class="nutrient-list" wx:if="{{!analysisNutrientsEmpty}}">
+            <view wx:for="{{analysisNutrients}}" wx:key="key" class="nutrient-item">
+              <text class="nutrient-label">{{item.label}}</text>
+              <text class="nutrient-count">{{item.count}}次</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 分类统计 -->
+        <view class="card">
+          <text class="section-title">🍱 食物分类</text>
+          <view class="empty-mini" wx:if="{{analysisCategoryStatsEmpty}}">
+            <text>暂无记录</text>
+          </view>
+          <view class="category-list" wx:if="{{!analysisCategoryStatsEmpty}}">
+            <view wx:for="{{analysisCategoryStats}}" wx:key="key" class="category-row">
+              <text class="category-label">{{item.label}}</text>
+              <view class="category-bar-wrap">
+                <view class="category-bar" style="width:{{item.percent}}%;background:{{item.color}}"></view>
+              </view>
+              <text class="category-count">{{item.count}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 趋势 -->
+        <view class="card">
+          <text class="section-title">📈 多样性评分</text>
+          <view class="empty-mini" wx:if="{{analysisTrendEmpty}}">
+            <text>暂无记录</text>
+          </view>
+          <view class="trend-wrap" wx:if="{{!analysisTrendEmpty}}">
+            <view wx:for="{{analysisDiversityTrend}}" wx:key="date" class="trend-col">
+              <view class="trend-bar-wrap">
+                <view class="trend-bar" style="height:{{item.score}}%;background:{{item.color}}"></view>
+              </view>
+              <text class="trend-date">{{item.date}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- ==================== 百科详情弹窗 ==================== -->
+  <view wx:if="{{showDetail && selectedFood}}" class="detail-modal" catchtouchmove="preventTouchMove">
+    <view class="detail-mask" bindtap="onCloseDetail"></view>
+    <view class="detail-sheet">
+      <view class="detail-header">
+        <text class="detail-title">{{selectedFood.name}}</text>
+        <text class="detail-close" bindtap="onCloseDetail">✕</text>
+      </view>
+      <view class="detail-body">
+        <view class="detail-row">
+          <text class="detail-key">分类</text>
+          <text class="detail-val">{{selectedFood._categoryIcon}} {{selectedFood._categoryLabel}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-key">添加月龄</text>
+          <text class="detail-val">{{selectedFood.startMonth}} - {{selectedFood.endMonth}} 月龄</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-key">推荐性状</text>
+          <text class="detail-val">{{selectedFood.texture}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-key">单次建议</text>
+          <text class="detail-val">{{selectedFood.serving}}{{selectedFood.unit}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-key">过敏原</text>
+          <text class="detail-val {{selectedFood.allergen === 'HIGH' ? 'text-danger' : ''}}">
+            {{selectedFood._allergenLabel}}
+            <text wx:if="{{selectedFood.allergenSource}}">（{{selectedFood.allergenSource}}）</text>
+          </text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-key">营养标签</text>
+          <view class="detail-tags">
+            <text wx:for="{{selectedFood._nutrientLabels}}" wx:key="*this" class="detail-tag">{{item}}</text>
+          </view>
+        </view>
+        <view class="detail-row detail-row-tips">
+          <text class="detail-key">小贴士</text>
+          <text class="detail-val">{{selectedFood.tips}}</text>
+        </view>
+        <button class="btn-primary" data-id="{{selectedFood.id}}" bindtap="onQuickAdd">添加到今日</button>
+      </view>
+    </view>
+  </view>
+
+</view>

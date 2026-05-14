@@ -1,0 +1,310 @@
+<view class="page-container">
+  <!-- 顶部Tab栏 -->
+  <view class="tab-bar">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="key"
+      class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="{{item.key}}"
+    >
+      <text class="tab-icon">{{item.icon}}</text>
+      <text class="tab-label">{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 身高体重表单 -->
+  <view class="form-card card" wx:if="{{activeTab === 'height'}}">
+    <view class="form-title">记录身高体重</view>
+
+    <view class="form-row">
+      <text class="form-label">日期</text>
+      <picker mode="date" value="{{heightForm.date}}" bindchange="onHeightDateChange">
+        <view class="form-picker">{{heightForm.date || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">身高 (cm)</text>
+      <input class="form-input" type="digit" placeholder="如: 62.5" value="{{heightForm.height}}" bindinput="onHeightInput" />
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">体重 (kg)</text>
+      <input class="form-input" type="digit" placeholder="如: 6.8" value="{{heightForm.weight}}" bindinput="onWeightInput" />
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">头围 (cm)</text>
+      <input class="form-input" type="digit" placeholder="如: 40.5" value="{{heightForm.headCircum}}" bindinput="onHeadInput" />
+    </view>
+
+    <button class="btn-primary" bindtap="submitHeight">保存记录</button>
+  </view>
+
+  <!-- 睡眠表单 -->
+  <view class="form-card card" wx:if="{{activeTab === 'sleep'}}">
+    <view class="form-title">记录睡眠</view>
+
+    <!-- 一键计时 -->
+    <view class="timer-section">
+      <view class="timer-display {{sleepTimerRunning ? 'running' : ''}}">{{sleepTimerDisplay}}</view>
+      <button class="btn-timer {{sleepTimerRunning ? 'btn-stop' : 'btn-start'}}" bindtap="toggleSleepTimer">
+        {{sleepTimerRunning ? '停止计时' : '开始计时'}}
+      </button>
+      <text class="timer-hint">{{sleepTimerRunning ? '宝宝睡着了，点击停止自动填充时间' : '宝宝刚睡着？一键开始计时'}}</text>
+    </view>
+
+    <view class="divider"><text class="divider-text">或手动填写</text></view>
+
+    <view class="form-row">
+      <text class="form-label">日期</text>
+      <picker mode="date" value="{{sleepForm.date}}" bindchange="onSleepDateChange">
+        <view class="form-picker">{{sleepForm.date}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">开始时间</text>
+      <picker mode="time" value="{{sleepForm.startTime}}" bindchange="onSleepStartChange">
+        <view class="form-picker {{sleepForm.startTime ? '' : 'placeholder'}}">{{sleepForm.startTime || '选择时间'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">结束时间</text>
+      <picker mode="time" value="{{sleepForm.endTime}}" bindchange="onSleepEndChange">
+        <view class="form-picker {{sleepForm.endTime ? '' : 'placeholder'}}">{{sleepForm.endTime || '选择时间'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">备注</text>
+      <textarea class="form-textarea" placeholder="如: 夜醒2次" value="{{sleepForm.note}}" bindinput="onSleepNoteInput" />
+    </view>
+
+    <button class="btn-primary" bindtap="submitSleep">保存记录</button>
+  </view>
+
+  <!-- 喂养表单 -->
+  <view class="form-card card" wx:if="{{activeTab === 'feed'}}">
+    <view class="form-title">记录喂养</view>
+
+    <view class="form-row">
+      <text class="form-label">日期</text>
+      <picker mode="date" value="{{feedForm.date}}" bindchange="onFeedDateChange">
+        <view class="form-picker">{{feedForm.date}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">喂养类型</text>
+      <view class="feed-type-grid">
+        <view
+          wx:for="{{feedTypes}}"
+          wx:key="key"
+          class="feed-type-item {{feedForm.type === item.key ? 'active' : ''}}"
+          bindtap="onFeedTypeChange"
+          data-index="{{index}}"
+        >
+          {{item.label}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 母乳选项 -->
+    <block wx:if="{{feedForm.type === 'breast' || feedForm.type === 'mixed'}}">
+      <view class="form-row">
+        <text class="form-label">哺乳侧</text>
+        <view class="breast-side-group">
+          <view class="breast-side {{feedForm.breastSide === 'left' ? 'active' : ''}}" bindtap="onFeedSideChange" data-side="left">左侧</view>
+          <view class="breast-side {{feedForm.breastSide === 'right' ? 'active' : ''}}" bindtap="onFeedSideChange" data-side="right">右侧</view>
+          <view class="breast-side {{feedForm.breastSide === 'both' ? 'active' : ''}}" bindtap="onFeedSideChange" data-side="both">双侧</view>
+        </view>
+      </view>
+      <view class="form-row">
+        <text class="form-label">时长 (分钟)</text>
+        <input class="form-input" type="number" placeholder="如: 15" value="{{feedForm.duration}}" bindinput="onFeedDurationInput" />
+      </view>
+    </block>
+
+    <!-- 奶粉选项 -->
+    <block wx:if="{{feedForm.type === 'formula'}}">
+      <view class="form-row">
+        <text class="form-label">奶量 (ml)</text>
+        <input class="form-input" type="number" placeholder="如: 120" value="{{feedForm.amount}}" bindinput="onFeedAmountInput" />
+      </view>
+    </block>
+
+    <!-- 辅食选项 -->
+    <block wx:if="{{feedForm.type === 'solid'}}">
+      <view class="form-row">
+        <text class="form-label">辅食种类</text>
+        <view class="feed-type-grid">
+          <view
+            wx:for="{{solidTypes}}"
+            wx:key="key"
+            class="feed-type-item {{feedForm.solidType === item.key ? 'active' : ''}}"
+            bindtap="onSolidTypeChange"
+            data-key="{{item.key}}"
+          >
+            {{item.label}}
+          </view>
+        </view>
+      </view>
+      <view class="form-row">
+        <text class="form-label">食量 (g)</text>
+        <input class="form-input" type="number" placeholder="如: 30" value="{{feedForm.solidAmount}}" bindinput="onSolidAmountInput" />
+      </view>
+    </block>
+
+    <view class="form-row">
+      <text class="form-label">备注</text>
+      <textarea class="form-textarea" placeholder="如: 吃了一半就睡了" value="{{feedForm.note}}" bindinput="onFeedNoteInput" />
+    </view>
+
+    <button class="btn-primary" bindtap="submitFeed">保存记录</button>
+  </view>
+
+  <!-- 辅食表单 -->
+  <view class="form-card card" wx:if="{{activeTab === 'food'}}">
+    <view class="form-title">记录辅食</view>
+
+    <view class="form-row">
+      <text class="form-label">日期</text>
+      <picker mode="date" value="{{foodForm.date}}" bindchange="onFoodDateChange">
+        <view class="form-picker">{{foodForm.date}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">餐次</text>
+      <picker mode="selector" range="{{mealOptions}}" value="{{mealIndex}}" bindchange="onFoodMealChange">
+        <view class="form-picker">{{foodForm.mealTime}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">推荐食物</text>
+      <scroll-view class="food-chip-scroll" scroll-x>
+        <view
+          wx:for="{{foodRecommendations}}"
+          wx:key="id"
+          class="food-chip {{foodForm.foodId === item.id ? 'active' : ''}}"
+          bindtap="onSelectFoodChip"
+          data-food="{{item}}"
+        >
+          <text class="chip-icon">{{item.icon}}</text>
+          <text>{{item.name}}</text>
+        </view>
+        <view wx:if="{{foodRecommendations.length === 0}}" class="food-chip-hint">暂无推荐</view>
+      </scroll-view>
+    </view>
+
+    <view class="form-row" wx:if="{{foodForm.foodId}}">
+      <text class="form-label">已选食物</text>
+      <view class="selected-food">{{foodForm.foodName}}</view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">食量</text>
+      <input class="form-input" type="digit" placeholder="如: 30" value="{{foodForm.amount}}" bindinput="onFoodAmountInput" />
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">备注</text>
+      <textarea class="form-textarea" placeholder="如: 吃了大半，很喜欢" value="{{foodForm.note}}" bindinput="onFoodNoteInput" />
+    </view>
+
+    <button class="btn-primary" bindtap="submitFood">保存记录</button>
+
+    <view class="food-link" bindtap="goFoodDetail">
+      <text>去辅食助手查看百科、排敏、分析 ›</text>
+    </view>
+  </view>
+
+  <!-- 便便表单 -->
+  <view class="form-card card" wx:if="{{activeTab === 'poop'}}">
+    <view class="form-title">记录便便</view>
+
+    <view class="form-row">
+      <text class="form-label">日期</text>
+      <picker mode="date" value="{{poopForm.date}}" bindchange="onPoopDateChange">
+        <view class="form-picker">{{poopForm.date}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">颜色</text>
+      <view class="color-grid">
+        <view
+          wx:for="{{poopColors}}"
+          wx:key="key"
+          class="color-item {{poopForm.color === item.key ? 'active' : ''}}"
+          bindtap="onPoopColorChange"
+          data-key="{{item.key}}"
+        >
+          <view class="color-dot" style="background:{{item.color}}"></view>
+          <text>{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">性状</text>
+      <view class="texture-grid">
+        <view
+          wx:for="{{poopTextures}}"
+          wx:key="key"
+          class="texture-item {{poopForm.texture === item.key ? 'active' : ''}}"
+          bindtap="onPoopTextureChange"
+          data-key="{{item.key}}"
+        >
+          {{item.label}}
+        </view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">备注</text>
+      <textarea class="form-textarea" placeholder="如: 有奶瓣" value="{{poopForm.note}}" bindinput="onPoopNoteInput" />
+    </view>
+
+    <button class="btn-primary" bindtap="submitPoop">保存记录</button>
+  </view>
+
+  <!-- 历史记录列表 -->
+  <view class="history-section">
+    <view class="history-header">
+      <text class="history-title">历史记录</text>
+      <text class="history-stats" bindtap="goStats">查看统计 ›</text>
+    </view>
+
+    <view class="history-list" wx:if="{{records.length > 0}}">
+      <view class="history-item-wrap" wx:for="{{records}}" wx:key="_id">
+        <view
+          class="history-item card {{swipedId === item._id ? 'swiped' : ''}}"
+          bindtouchstart="onTouchStart"
+          bindtouchend="onTouchEnd"
+          data-id="{{item._id}}"
+        >
+          <view class="history-content">
+            <text class="history-value">{{item.displayValue}}</text>
+            <text class="history-date">{{item.date}}</text>
+          </view>
+          <text class="history-note" wx:if="{{item.note}}">{{item.note}}</text>
+        </view>
+        <view class="delete-btn" wx:if="{{swipedId === item._id}}" bindtap="deleteRecord" data-id="{{item._id}}" data-type="{{item.type}}">删除</view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{!loading && records.length === 0}}">
+      <text class="empty-icon">📝</text>
+      <text class="empty-text">还没有记录，从上方开始记录吧</text>
+    </view>
+
+    <view class="loading-more" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>

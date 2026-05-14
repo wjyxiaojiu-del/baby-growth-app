@@ -1,0 +1,58 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/record/record",
+    "pages/milestone/milestone",
+    "pages/report/report",
+    "pages/profile/profile",
+    "pages/profile/edit-baby",
+    "pages/profile/privacy",
+    "pages/profile/about",
+    "pages/vaccine/vaccine",
+    "pages/food/food",
+    "pages/album/album",
+    "pages/remind/remind",
+    "pages/knowledge/knowledge"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFB5C2",
+    "navigationBarTitleText": "宝宝成长记",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#FFF5F5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#FF6B81",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/record/record",
+        "text": "记录",
+        "iconPath": "images/tab-record.png",
+        "selectedIconPath": "images/tab-record-active.png"
+      },
+      {
+        "pagePath": "pages/milestone/milestone",
+        "text": "评估",
+        "iconPath": "images/tab-assess.png",
+        "selectedIconPath": "images/tab-assess-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tab-profile.png",
+        "selectedIconPath": "images/tab-profile-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

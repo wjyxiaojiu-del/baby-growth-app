@@ -1,0 +1,116 @@
+<view class="page-container">
+  <!-- 宝宝信息卡片 -->
+  <view class="profile-card card">
+    <view class="profile-avatar-wrap">
+      <image class="profile-avatar" src="{{babyInfo.avatar || '/images/baby-default.png'}}" mode="aspectFill" />
+    </view>
+    <view class="profile-info">
+      <text class="profile-name">{{babyInfo.nickname || '未设置'}}</text>
+      <text class="profile-age" wx:if="{{babyAge}}">{{babyAge.display}}</text>
+      <text class="profile-age" wx:else>请先完善宝宝信息</text>
+    </view>
+    <view class="profile-edit" bindtap="onMenuTap" data-key="editBaby">编辑 ›</view>
+  </view>
+
+  <!-- 数据统计 -->
+  <view class="stats-card card">
+    <view class="stats-grid">
+      <view class="stats-item">
+        <text class="stats-num">{{stats.recordCount}}</text>
+        <text class="stats-label">条记录</text>
+      </view>
+      <view class="stats-divider"></view>
+      <view class="stats-item">
+        <text class="stats-num">{{stats.reportCount}}</text>
+        <text class="stats-label">份报告</text>
+      </view>
+      <view class="stats-divider"></view>
+      <view class="stats-item">
+        <text class="stats-num">{{stats.milestoneCount}}</text>
+        <text class="stats-label">项里程碑</text>
+      </view>
+      <view class="stats-divider"></view>
+      <view class="stats-item">
+        <text class="stats-num">{{stats.foodLogCount}}</text>
+        <text class="stats-label">条辅食</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成就徽章 -->
+  <view class="achievement-card card">
+    <view class="ach-header" bindtap="toggleAchievements">
+      <view class="ach-title-row">
+        <text class="ach-title">成就徽章</text>
+        <text class="ach-count">{{unlockedCount}}/{{achievements.length}}</text>
+      </view>
+      <text class="ach-toggle">{{showAllAchievements ? '收起' : '查看全部'}}</text>
+    </view>
+
+    <!-- 已解锁的成就（默认展示） -->
+    <view class="ach-grid" wx:if="{{!showAllAchievements}}">
+      <view class="ach-item unlocked" wx:for="{{achievements}}" wx:key="key" wx:if="{{item.unlocked}}">
+        <text class="ach-icon">{{item.icon}}</text>
+        <text class="ach-name">{{item.title}}</text>
+      </view>
+      <view class="ach-item locked" wx:if="{{unlockedCount < achievements.length}}">
+        <text class="ach-icon">🔒</text>
+        <text class="ach-name">更多成就</text>
+      </view>
+    </view>
+
+    <!-- 全部成就（展开） -->
+    <view class="ach-grid" wx:if="{{showAllAchievements}}">
+      <view class="ach-item {{item.unlocked ? 'unlocked' : 'locked'}}" wx:for="{{achievements}}" wx:key="key">
+        <text class="ach-icon">{{item.unlocked ? item.icon : '🔒'}}</text>
+        <text class="ach-name">{{item.title}}</text>
+        <text class="ach-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 菜单列表 -->
+  <view class="menu-card card">
+    <view
+      wx:for="{{menuItems}}"
+      wx:key="key"
+      class="menu-item"
+      bindtap="onMenuTap"
+      data-key="{{item.key}}"
+    >
+      <text class="menu-icon">{{item.icon}}</text>
+      <text class="menu-label">{{item.label}}</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 同步状态 -->
+  <view class="sync-card card" bindtap="manualSync">
+    <view class="sync-left">
+      <text class="sync-icon">☁️</text>
+      <view class="sync-info">
+        <text class="sync-title">数据同步</text>
+        <text class="sync-desc">{{syncStatus.lastSyncTimeStr || '从未同步'}}</text>
+      </view>
+    </view>
+    <view class="sync-right">
+      <text class="sync-btn" wx:if="{{!syncing}}">立即同步</text>
+      <text class="sync-btn syncing" wx:else>同步中...</text>
+    </view>
+  </view>
+
+  <!-- 数据管理 -->
+  <view class="danger-zone card">
+    <view class="danger-title">数据管理</view>
+    <view class="danger-item" bindtap="clearAllData">
+      <text class="danger-icon">🗑️</text>
+      <text class="danger-label">删除所有数据</text>
+      <text class="danger-desc">此操作不可恢复</text>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text>宝宝成长记 v2.0.0</text>
+  </view>
+</view>

@@ -1,0 +1,45 @@
+<view class="page-container">
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+  </view>
+
+  <block wx:else>
+    <!-- 宝宝月龄 -->
+    <view class="remind-header card">
+      <text class="remind-baby">{{babyInfo.nickname || '宝宝'}}</text>
+      <text class="remind-age">当前 {{babyAge.display}}</text>
+      <text class="remind-desc">以下提醒根据宝宝月龄自动生成</text>
+    </view>
+
+    <!-- 分类筛选 -->
+    <view class="category-bar">
+      <view class="cat-item {{activeCategory === 'all' ? 'active' : ''}}" data-cat="all" bindtap="switchCategory">全部</view>
+      <view class="cat-item {{activeCategory === 'growthSpurt' ? 'active' : ''}}" data-cat="growthSpurt" bindtap="switchCategory">📈 猛涨期</view>
+      <view class="cat-item {{activeCategory === 'teething' ? 'active' : ''}}" data-cat="teething" bindtap="switchCategory">🦷 出牙</view>
+      <view class="cat-item {{activeCategory === 'food' ? 'active' : ''}}" data-cat="food" bindtap="switchCategory">🍽️ 辅食</view>
+      <view class="cat-item {{activeCategory === 'checkup' ? 'active' : ''}}" data-cat="checkup" bindtap="switchCategory">🏥 体检</view>
+    </view>
+
+    <!-- 提醒列表 -->
+    <view class="remind-list">
+      <view wx:if="{{getDisplayReminders().length === 0}}" class="empty-state">
+        <text class="empty-icon">✅</text>
+        <text class="empty-title">暂无提醒</text>
+        <text class="empty-desc">当前月龄没有即将到来的提醒事项</text>
+      </view>
+
+      <view class="remind-card card" wx:for="{{getDisplayReminders()}}" wx:key="title">
+        <view class="remind-card-header">
+          <text class="remind-icon">{{item.icon}}</text>
+          <view class="remind-card-info">
+            <text class="remind-card-title">{{item.title || item.teeth || item.name}}</text>
+            <text class="remind-card-category">{{item.category}}</text>
+          </view>
+          <text class="remind-due" wx:if="{{item.dueIn}}">{{item.dueIn}}</text>
+          <text class="remind-month" wx:elif="{{item.month}}">{{item.month}}月龄</text>
+        </view>
+        <text class="remind-card-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </block>
+</view>

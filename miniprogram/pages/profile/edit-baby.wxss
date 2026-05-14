@@ -1,0 +1,97 @@
+.page-container { padding-bottom: 120rpx; }
+
+/* 头像区域 */
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48rpx 0;
+}
+
+.avatar-wrap { position: relative; width: 160rpx; height: 160rpx; }
+
+.avatar-img {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  border: 3rpx solid rgba(255, 181, 194, 0.6);
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 129, 0.15);
+}
+
+.avatar-edit-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 48rpx;
+  height: 48rpx;
+  background: linear-gradient(135deg, #FF6B81, #FF8E9E);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  border: 3rpx solid #FFF;
+  box-shadow: 0 2rpx 8rpx rgba(255, 107, 129, 0.3);
+}
+
+.avatar-hint { font-size: 24rpx; color: #999; margin-top: 16rpx; }
+
+.form-card { margin-top: 0; }
+.form-row { margin-bottom: 32rpx; }
+.form-row:last-child { margin-bottom: 0; }
+.form-label { display: block; font-size: 28rpx; color: #333; font-weight: 600; margin-bottom: 16rpx; }
+
+.form-input {
+  width: 100%;
+  height: 88rpx;
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1rpx solid rgba(240, 224, 226, 0.5);
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.form-picker {
+  height: 88rpx;
+  line-height: 88rpx;
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1rpx solid rgba(240, 224, 226, 0.5);
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.form-picker.placeholder { color: #CCC; }
+
+.gender-grid { display: flex; gap: 24rpx; }
+
+.gender-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx;
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1rpx solid rgba(240, 224, 226, 0.4);
+  border-radius: 16rpx;
+  transition: all 0.2s;
+}
+
+.gender-item.active {
+  border-color: rgba(255, 107, 129, 0.5);
+  background: rgba(255, 240, 242, 0.7);
+}
+
+.gender-icon { font-size: 48rpx; margin-bottom: 8rpx; }
+.gender-label { font-size: 28rpx; color: #666; }
+.gender-item.active .gender-label { color: #FF6B81; font-weight: 600; }
+
+.action-bar { padding: 48rpx 24rpx; }

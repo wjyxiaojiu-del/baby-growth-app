@@ -1,0 +1,201 @@
+.page-container { padding-bottom: 120rpx; }
+
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid rgba(255, 213, 219, 0.5);
+  border-top-color: #FF6B81;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text { margin-top: 20rpx; color: #999; font-size: 26rpx; }
+
+/* 宝宝卡片 */
+.baby-card { display: flex; align-items: center; }
+
+.baby-avatar-wrap {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3rpx solid rgba(255, 181, 194, 0.6);
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 16rpx rgba(255, 107, 129, 0.15);
+}
+
+.baby-avatar { width: 100%; height: 100%; }
+
+.baby-info { flex: 1; margin-left: 24rpx; }
+.baby-name { display: block; font-size: 34rpx; font-weight: 600; color: #333; }
+.baby-age { display: block; font-size: 24rpx; color: #999; margin-top: 8rpx; }
+.baby-card-arrow { font-size: 40rpx; color: #CCC; }
+
+/* 快捷记录 */
+.section-title { font-size: 30rpx; font-weight: 600; color: #333; margin-bottom: 24rpx; }
+
+.quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24rpx; }
+
+.quick-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quick-icon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1rpx solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.icon-height { background: rgba(232, 245, 233, 0.7); }
+.icon-sleep { background: rgba(227, 242, 253, 0.7); }
+.icon-feed  { background: rgba(255, 243, 224, 0.7); }
+.icon-poop  { background: rgba(252, 228, 236, 0.7); }
+
+.quick-label { margin-top: 12rpx; font-size: 24rpx; color: #666; }
+
+/* 今日概览 */
+.overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16rpx; }
+
+.overview-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  background: rgba(255, 245, 245, 0.5);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-radius: 16rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.6);
+}
+
+.overview-value { font-size: 40rpx; font-weight: 700; color: #FF6B81; }
+.overview-label { font-size: 22rpx; color: #999; margin-top: 8rpx; }
+
+/* AI入口 */
+.ai-entry {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 240, 242, 0.6);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  border: 1rpx solid rgba(255, 213, 219, 0.4);
+}
+
+.ai-entry-left { display: flex; align-items: center; flex: 1; }
+
+.ai-icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B81, #FF8E9E);
+  color: #FFF;
+  font-size: 28rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 16rpx rgba(255, 107, 129, 0.3);
+}
+
+.ai-text { margin-left: 20rpx; }
+.ai-title { display: block; font-size: 30rpx; font-weight: 600; color: #333; }
+.ai-desc { display: block; font-size: 24rpx; color: #888; margin-top: 4rpx; }
+.ai-arrow { font-size: 40rpx; color: #FF6B81; }
+
+/* 辅食提醒 */
+.food-reminder { display: flex; align-items: center; background: rgba(255, 248, 230, 0.6); }
+.food-reminder-icon { font-size: 40rpx; margin-right: 16rpx; }
+.food-reminder-text { flex: 1; }
+.food-reminder-title { display: block; font-size: 28rpx; font-weight: 600; color: #333; }
+.food-reminder-desc { display: block; font-size: 24rpx; color: #888; }
+.food-reminder-arrow { font-size: 40rpx; color: #FF6B81; }
+
+/* 疫苗提醒 */
+.vaccine-reminder { display: flex; align-items: center; }
+.vaccine-icon { font-size: 40rpx; margin-right: 16rpx; }
+.vaccine-text { flex: 1; }
+.vaccine-title { display: block; font-size: 28rpx; font-weight: 600; color: #333; }
+.vaccine-desc { display: block; font-size: 24rpx; color: #888; }
+.vaccine-date { font-size: 24rpx; color: #FF6B81; font-weight: 600; }
+
+/* 功能入口 */
+.feature-grid { padding: 32rpx; }
+.feature-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24rpx; }
+.feature-item { display: flex; flex-direction: column; align-items: center; }
+.feature-icon {
+  width: 88rpx; height: 88rpx; border-radius: 24rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40rpx; border: 1rpx solid rgba(255,255,255,0.6);
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.04);
+}
+.icon-album { background: rgba(255,243,224,0.7); }
+.icon-remind { background: rgba(227,242,253,0.7); }
+.icon-knowledge { background: rgba(232,245,233,0.7); }
+.icon-vaccine { background: rgba(244,143,177,0.4); }
+.feature-label { margin-top: 12rpx; font-size: 24rpx; color: #666; }
+
+/* 智能提醒卡片 */
+.remind-card { padding: 28rpx; }
+.remind-list { display: flex; flex-direction: column; gap: 16rpx; }
+.remind-item { display: flex; align-items: center; gap: 16rpx; }
+.remind-item-icon { font-size: 32rpx; }
+.remind-item-info { flex: 1; }
+.remind-item-title { display: block; font-size: 26rpx; font-weight: 600; color: #333; }
+.remind-item-type { display: block; font-size: 22rpx; color: #FF6B81; }
+
+/* 最近记录 */
+.record-list { display: flex; flex-direction: column; gap: 16rpx; }
+
+.record-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid rgba(245, 230, 232, 0.5);
+}
+
+.record-item:last-child { border-bottom: none; }
+
+.record-type-tag {
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+  color: #FFF;
+  flex-shrink: 0;
+}
+
+.record-type-tag.sleep { background: rgba(144, 202, 249, 0.8); }
+.record-type-tag.feed  { background: rgba(255, 204, 128, 0.8); }
+.record-type-tag.poop  { background: rgba(244, 143, 177, 0.8); }
+.record-type-tag.height { background: rgba(165, 214, 167, 0.8); }
+
+.record-content {
+  flex: 1;
+  margin-left: 16rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.record-value { font-size: 28rpx; color: #333; }
+.record-time { font-size: 22rpx; color: #CCC; }
