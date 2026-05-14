@@ -1,5 +1,7 @@
 # 依赖
 node_modules/
+server/node_modules/
+server/data/
 
 # 微信开发者工具
 miniprogram/miniprogram_npm/
